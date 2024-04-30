@@ -155,14 +155,7 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 
--- Custom
-local opt = vim.opt
-opt.termguicolors = true
-opt.cindent = true
-opt.relativenumber = true
-opt.wrap = false
-opt.cmdheight = 0
-vim.g.have_nerd_font = true
+
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -381,7 +374,7 @@ require('lazy').setup({
 
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
-      pcall(require('telescope').load_extension, 'ui-select')
+      --pcall(require('telescope').load_extension, 'ui-select')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -618,7 +611,7 @@ require('lazy').setup({
         local lspconfig = require "lspconfig"
 
         local testCap = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
+        capabilities.offsetEncoding = 'utf-16'
         lspconfig["clangd"].setup{
           on_attach = function(client, buffer)
             on_attach(client, buffer)
@@ -626,18 +619,24 @@ require('lazy').setup({
             require("clangd_extensions.inlay_hints").setup_autocmd()
             require("clangd_extensions.inlay_hints").set_inlay_hints()
           end,
-          capabilities = testCap,
+          -- cmd = {
+          --   "clangd",
+          --   "--offset-encoding=utf-16",
+          -- },
+          capabilities = capabilities,
         }
 
         require("roslyn").setup({
-          on_attach = function(client, buffer)
-            on_attach(client, buffer)
-          end,
-          capabilities = testCap, -- required
+          --on_attach = function(client, buffer)
+          --  on_attach(client, buffer)
+            
+          --end,
+          capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities),
           handlers = {
-          ["textdocument/definition"] = require('omnisharp_extended').handler,
-        }
+            ["textdocument/definition"] = require('omnisharp_extended').handler,
+          }
         })
+
 
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
@@ -994,4 +993,4 @@ require('lualine').setup(
   }
 )
 
-
+require('custom.custom_init')

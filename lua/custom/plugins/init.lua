@@ -31,13 +31,13 @@ return {
 
       -- C# stuff:
 
-  {
-    "OmniSharp/omnisharp-roslyn",
-    lazy = false
-  },
+--   {
+--     "OmniSharp/omnisharp-roslyn",
+--     -- lazy = false
+--   },
   {
     "Hoffs/omnisharp-extended-lsp.nvim",
-    lazy = false,
+    -- lazy = false,
   },
   -- {
   --   "Decodetalkers/csharpls-extended-lsp.nvim",
@@ -100,7 +100,7 @@ return {
       },
       {
         "HiPhish/rainbow-delimiters.nvim",
-        --lazy = false,
+        lazy = false,
         config = function()
          -- This module contains a number of default definitions
             local rainbow_delimiters = require 'rainbow-delimiters'
@@ -116,13 +116,14 @@ return {
                 },
                 highlight = {
                     'RainbowDelimiterRed',
-                    'RainbowDelimiterYellow',
                     'RainbowDelimiterBlue',
+                    'RainbowDelimiterYellow',
                     'RainbowDelimiterOrange',
                     'RainbowDelimiterGreen',
                     'RainbowDelimiterViolet',
                     'RainbowDelimiterCyan',
                 },
+                -- whitelist = {'c', 'cpp', 'cs'},
             }
         end,
       },
@@ -163,6 +164,6 @@ return {
       },
     {
         "github/copilot.vim",
-        lazy = false
+        -- lazy = false
     },
 }
