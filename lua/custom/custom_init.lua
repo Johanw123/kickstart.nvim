@@ -19,3 +19,19 @@ opt.tabstop = 2
 opt.softtabstop = 2
 
 vim.g.mapleader = " "
+
+local highlight = {
+    "IndentLineColor",
+  }
+  
+  local hooks = require "ibl.hooks"
+  -- create the highlight groups in the highlight setup hook, so they are reset
+  -- every time the colorscheme changes
+  hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+    vim.api.nvim_set_hl(0, "IndentLineColor", { fg = "#2b303c" })
+  end)
+
+--   hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+--   hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_tab_indent_level)
+  
+  require("ibl").setup { indent = { highlight = highlight } }
