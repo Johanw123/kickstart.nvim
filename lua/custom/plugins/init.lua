@@ -151,4 +151,8 @@ return {
     "github/copilot.vim",
     -- lazy = false
   },
+
+  {
+    "onsails/lspkind.nvim"
+  },
 }

@@ -293,12 +293,13 @@ require('lazy').setup({
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
         ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-        ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+        -- ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
+        --['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
       }
       -- visual mode
-      require('which-key').register({
-        ['<leader>h'] = { 'Git [H]unk' },
-      }, { mode = 'v' })
+      -- require('which-key').register({
+      --   ['<leader>h'] = { 'Git [H]unk' },
+      -- }, { mode = 'v' })
     end,
   },
 
@@ -534,15 +535,30 @@ require('lazy').setup({
             })
           end
 
+
           -- The following autocommand is used to enable inlay hints in your
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-            end, '[T]oggle Inlay [H]ints')
+
+          if client.name == "clangd" then
+            require("clangd_extensions").setup()
+            require("clangd_extensions.inlay_hints").setup_autocmd()
+            require("clangd_extensions.inlay_hints").set_inlay_hints()
+
+            map('<leader>lt', function() require("clangd_extensions.inlay_hints").toggle_inlay_hints() end, '[T]oggle Hints')
+          else
+            if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+              map('<leader>lt', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, '[T]oggle Hints')
+            end
           end
+
+           -- vim.keymap.set('n', '<leader>lt', 
+  --   function()      
+  --     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+  --       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  --     end
+  --   end, { desc = '[T]oggle Hints' })
         end,
       })
 
@@ -571,13 +587,14 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-         --clangd = {},
+         clangd = {},
          cpptools = {},
          pyright = {},
          rust_analyzer = {},
          powershell_es = {},
          shellcheck = {},
          shellharden = {},
+         --roslyn = {},
 
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -605,39 +622,17 @@ require('lazy').setup({
         },
       }
 
-      
-        --- lsp
-
-        local lspconfig = require "lspconfig"
-
-        local testCap = require('cmp_nvim_lsp').default_capabilities(capabilities)
-        capabilities.offsetEncoding = 'utf-16'
-        lspconfig["clangd"].setup{
-          on_attach = function(client, buffer)
-            on_attach(client, buffer)
-            require("clangd_extensions").setup()
-            require("clangd_extensions.inlay_hints").setup_autocmd()
-            require("clangd_extensions.inlay_hints").set_inlay_hints()
-          end,
-          -- cmd = {
-          --   "clangd",
-          --   "--offset-encoding=utf-16",
-          -- },
-          capabilities = capabilities,
+      require("roslyn").setup({
+        on_attach = function(client, buffer)
+          
+        end,
+        capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities),
+        handlers = {
+          ["textdocument/definition"] = require('omnisharp_extended').handler,
         }
+      })
 
-        require("roslyn").setup({
-          --on_attach = function(client, buffer)
-          --  on_attach(client, buffer)
-            
-          --end,
-          capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities),
-          handlers = {
-            ["textdocument/definition"] = require('omnisharp_extended').handler,
-          }
-        })
-
-
+    
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -662,7 +657,12 @@ require('lazy').setup({
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+
+            if server_name == "clangd" then
+              capabilities.offsetEncoding = 'utf-16'
+            end
+
+            require('lspconfig')[server_name].setup(server)    
           end,
         },
       }
@@ -672,16 +672,16 @@ require('lazy').setup({
   { -- Autoformat
     'stevearc/conform.nvim',
     lazy = false,
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_fallback = true }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
+    -- keys = {
+    --   {
+    --     '<leader>f',
+    --     function()
+    --       require('conform').format { async = true, lsp_fallback = true }
+    --     end,
+    --     mode = '',
+    --     desc = '[F]ormat buffer',
+    --   },
+    --},
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
@@ -777,14 +777,32 @@ require('lazy').setup({
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          ['<CR>'] = cmp.mapping.confirm { select = true },
+          ['<S-CR>'] = cmp.mapping.confirm { select = false },
+          ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
-          ['<C-Space>'] = cmp.mapping.complete {},
+
+          -- Toggle cmp window
+          ["<C-Space>"] = cmp.mapping({
+            i = function()
+              if cmp.visible() then
+                cmp.abort()
+              else
+                cmp.complete()
+              end
+            end,
+            c = function()
+              if cmp.visible() then
+                cmp.close()
+              else
+                cmp.complete()
+              end
+            end,
+          }),
 
           -- Think of <c-l> as moving to the right of your snippet expansion.
           --  So if you have a snippet that's like:
@@ -812,7 +830,77 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'cmp_ai' },
         },
+
+        formatting = {
+          fields = {"kind", "abbr", "menu" },
+          format = function(entry, vim_item)
+            local item = entry:get_completion_item()
+      
+            function trim(text, len)
+              local max = len
+              if text and text:len() > max then
+                text = text:sub(1, max-3) .. "..."
+              end
+              return text
+            end
+      
+            local from = ""
+            if item.documentation and entry.source.name == "nvim_lsp" then
+                if entry.source.source.client.name == "clangd" then
+                from = item.documentation.value
+                from = string.match(from, "%w*%.%w*");
+                from = string.format(" (%s)", from)
+                from = trim(from, 20)
+              end
+            end
+      
+            local type = ""
+            if item.detail and entry.source.name == "nvim_lsp" then
+              if entry.source.source.client.name == "clangd" then
+                type = item.detail
+                type = type:gsub("(%w*::)", "")
+                type = type:gsub("unique_ptr", "u*")
+      
+                if type:len() > 20 then
+                  type = type:sub(1, 20)
+                end
+                type = string.format(" (%s)", type)
+              end
+            end
+      
+            vim_item.abbr = trim(vim_item.abbr, 60)
+            local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+            --vim_item.kind = string.format("%s%s", icons[vim_item.kind], type)
+            local strings = vim.split(kind.kind, "%s", { trimempty = true })
+            kind.kind = " " .. (strings[1] or "") .. type .. " "
+            vim_item.menu = string.format("%s%s", ({
+              luasnip = "[SNP]",
+              nvim_lsp = "[LSP]",
+              buffer = "[BUF]",
+              nvim_lua = "[Lua]",
+              cmp_ai = '[AI]',
+              path = "[PTH]",
+            })[entry.source.name], from)
+      
+      
+            if entry.source.name == 'cmp_ai' then
+              local detail = (entry.completion_item.labelDetails or {}).detail
+              vim_item.kind = ''
+              if detail and detail:find('.*%%.*') then
+                vim_item.kind = vim_item.kind .. ' ' .. detail
+              end
+      
+              if (entry.completion_item.data or {}).multiline then
+                vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
+              end
+            end
+      
+            return vim_item
+          end,
+        },
+
       }
     end,
   },
@@ -956,7 +1044,8 @@ require('lazy').setup({
 -- vim: ts=2 sts=2 sw=2 et
 
 local function lsp_progress()
-  local messages = vim.lsp.util.get_progress_messages()
+  --local messages = vim.lsp.util.get_progress_messages()
+  local messages = vim.lsp.status()
   if #messages == 0 then
     return
   end
