@@ -319,6 +319,11 @@ require('lazy').setup({
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
 
+        "jvgrootveld/telescope-zoxide",
+        "mollerhoj/telescope-recent-files.nvim",
+        "nvim-telescope/telescope-project.nvim",
+
+
         -- `build` is used to run some command when the plugin is installed/updated.
         -- This is only run then, not every time Neovim starts up.
         build = 'make',
@@ -366,6 +371,17 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        pickers = {
+          find_files = {
+            find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' },
+          },
+          grep_string = {
+            additional_args = {'--hidden'}
+          },
+          live_grep = {
+            additional_args = {'--hidden'}
+          }
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -376,6 +392,8 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       --pcall(require('telescope').load_extension, 'ui-select')
+
+      pcall(require('telescope').load_extension, 'zoxide')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -717,9 +735,9 @@ require('lazy').setup({
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
+          --if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+           -- return
+          --end
           return 'make install_jsregexp'
         end)(),
         dependencies = {

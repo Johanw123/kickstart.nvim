@@ -20,6 +20,21 @@ opt.softtabstop = 2
 
 vim.g.mapleader = " "
 
+if vim.g.neovide then
+	--vim.g.neovide_transparency = 0.9
+	--vim.g.transparency = 0.9
+	--vim.g.neovide_background_color = "#332C2A" .. alpha()
+	--vim.g.neovide_background_color = "#332C2A"
+
+	vim.o.guifont = "FiraCode NF"
+
+	vim.g.neovide_floating_blur_amount_x = 2
+	vim.g.neovide_floating_blur_amount_y = 2
+
+	vim.g.neovide_refresh_rate = 165
+	vim.g.neovide_cursor_animation_length = 0
+end
+
 local highlight = {
     "IndentLineColor",
   }
@@ -63,6 +78,20 @@ local highlight = {
 
   -- LSP
   vim.keymap.set('n', '<leader>lh', function() vim.lsp.buf.signature_help() end, { desc = '[H]elp' })
+
+
+  -- Telescope
+  vim.keymap.set("n", "<leader>cd", require("telescope").extensions.zoxide.list, {desc = "[C]hange [D]irectory"})
+  --vim.keymap.set("n", "<leader>fs", function() require('telescope.builtin').grep_string() end, {desc = "[F]ind [S]tring"})
+ -- vim.keymap.set("n", "<leader>fr", function() require('telescope.builtin').lsp_references() end, {desc = "[F]ind [R]eferences"})
+
+
+
+  vim.keymap.set('n', '<Leader>pf', 'i<C-r><C-o>+<ESC>l=`[`]$', { desc = 'Paste block and indent'})
+
+
+
+
   -- vim.keymap.set('n', '<leader>lt', 
   --   function()      
   --     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
