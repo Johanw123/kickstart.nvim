@@ -90,6 +90,9 @@ local highlight = {
   vim.keymap.set('n', '<Leader>pf', 'i<C-r><C-o>+<ESC>l=`[`]$', { desc = 'Paste block and indent'})
 
 
+-- Precognition
+  -- vim.keymap.set('n', '<leader>p', 'lua require("precognition").peek()', { desc = 'Move focus to the upper window' })
+  vim.keymap.set('n', '<leader>tp', '<cmd> lua require("precognition").toggle()<cr>', { desc = 'Move focus to the upper window' })
 
 
   -- vim.keymap.set('n', '<leader>lt', 

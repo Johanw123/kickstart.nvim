@@ -162,12 +162,10 @@ return {
     config = function(_, opts) require'lsp_signature'.setup(opts) end
   },
 
-
-
   {
     "k-takata/vim-nsis"
   },
-}
+
   {
    "tris203/precognition.nvim",
       --event = "VeryLazy",
