@@ -337,6 +337,15 @@ theme.set_highlights = function()
 
   -- Illuminate
   hl(0, "IlluminatedWordText", { fg = 'NONE', bg = c.base02, sp = 'NONE',  })
+
+
+  hl(0, "RainbowDelimiterRed", { fg = c.white, bg = 'NONE' })
+  hl(0, "RainbowDelimiterBlue", { fg = c.vibrant_green, bg = 'NONE' })
+  hl(0, "RainbowDelimiterOrange", { fg = c.orange, bg = 'NONE' })
+  hl(0, "RainbowDelimiterGreen", { fg = c.green, bg = 'NONE' })
+  hl(0, "RainbowDelimiterViolet", { fg = c.purple, bg = 'NONE' })
+  hl(0, "RainbowDelimiterCyan", { fg = c.cyan, bg = 'NONE' })
+  hl(0, "RainbowDelimiterYellow", { fg = c.nord_blue, bg = 'NONE' })
 end
 
 return theme

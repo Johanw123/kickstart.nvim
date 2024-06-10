@@ -154,14 +154,7 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
--- Custom
-local opt = vim.opt
-opt.termguicolors = true
-opt.cindent = true
-opt.relativenumber = true
-opt.wrap = false
-opt.cmdheight = 0
-vim.g.have_nerd_font = true
+
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -299,12 +292,13 @@ require('lazy').setup({
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
         ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-        ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+        -- ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
+        --['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
       }
       -- visual mode
-      require('which-key').register({
-        ['<leader>h'] = { 'Git [H]unk' },
-      }, { mode = 'v' })
+      -- require('which-key').register({
+      --   ['<leader>h'] = { 'Git [H]unk' },
+      -- }, { mode = 'v' })
     end,
   },
 
@@ -323,6 +317,11 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
+
+        "jvgrootveld/telescope-zoxide",
+        "mollerhoj/telescope-recent-files.nvim",
+        "nvim-telescope/telescope-project.nvim",
+
 
         -- `build` is used to run some command when the plugin is installed/updated.
         -- This is only run then, not every time Neovim starts up.
@@ -371,6 +370,17 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        pickers = {
+          find_files = {
+            find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' },
+          },
+          grep_string = {
+            additional_args = {'--hidden'}
+          },
+          live_grep = {
+            additional_args = {'--hidden'}
+          }
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -380,7 +390,9 @@ require('lazy').setup({
 
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
-      pcall(require('telescope').load_extension, 'ui-select')
+      --pcall(require('telescope').load_extension, 'ui-select')
+
+      pcall(require('telescope').load_extension, 'zoxide')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -540,15 +552,30 @@ require('lazy').setup({
             })
           end
 
+
           -- The following autocommand is used to enable inlay hints in your
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-            end, '[T]oggle Inlay [H]ints')
+
+          if client.name == "clangd" then
+            require("clangd_extensions").setup()
+            require("clangd_extensions.inlay_hints").setup_autocmd()
+            require("clangd_extensions.inlay_hints").set_inlay_hints()
+
+            map('<leader>lt', function() require("clangd_extensions.inlay_hints").toggle_inlay_hints() end, '[T]oggle Hints')
+          else
+            if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+              map('<leader>lt', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, '[T]oggle Hints')
+            end
           end
+
+           -- vim.keymap.set('n', '<leader>lt', 
+  --   function()      
+  --     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+  --       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  --     end
+  --   end, { desc = '[T]oggle Hints' })
         end,
       })
 
@@ -577,13 +604,14 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        --clangd = {},
-        cpptools = {},
-        pyright = {},
-        rust_analyzer = {},
-        powershell_es = {},
-        shellcheck = {},
-        shellharden = {},
+         clangd = {},
+         cpptools = {},
+         pyright = {},
+         rust_analyzer = {},
+         powershell_es = {},
+         shellcheck = {},
+         shellharden = {},
+         --roslyn = {},
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -610,32 +638,17 @@ require('lazy').setup({
         },
       }
 
-      --- lsp
-
-      local lspconfig = require 'lspconfig'
-
-      local testCap = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-      lspconfig['clangd'].setup {
+      require("roslyn").setup({
         on_attach = function(client, buffer)
-          on_attach(client, buffer)
-          require('clangd_extensions').setup()
-          require('clangd_extensions.inlay_hints').setup_autocmd()
-          require('clangd_extensions.inlay_hints').set_inlay_hints()
+          
         end,
-        capabilities = testCap,
-      }
-
-      require('roslyn').setup {
-        on_attach = function(client, buffer)
-          on_attach(client, buffer)
-        end,
-        capabilities = testCap, -- required
+        capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities),
         handlers = {
-          ['textdocument/definition'] = require('omnisharp_extended').handler,
-        },
-      }
+          ["textdocument/definition"] = require('omnisharp_extended').handler,
+        }
+      })
 
+    
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -660,7 +673,12 @@ require('lazy').setup({
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+
+            if server_name == "clangd" then
+              capabilities.offsetEncoding = 'utf-16'
+            end
+
+            require('lspconfig')[server_name].setup(server)    
           end,
         },
       }
@@ -670,16 +688,16 @@ require('lazy').setup({
   { -- Autoformat
     'stevearc/conform.nvim',
     lazy = false,
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_fallback = true }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
+    -- keys = {
+    --   {
+    --     '<leader>f',
+    --     function()
+    --       require('conform').format { async = true, lsp_fallback = true }
+    --     end,
+    --     mode = '',
+    --     desc = '[F]ormat buffer',
+    --   },
+    --},
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
@@ -715,9 +733,9 @@ require('lazy').setup({
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
+          --if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+           -- return
+          --end
           return 'make install_jsregexp'
         end)(),
         dependencies = {
@@ -775,14 +793,32 @@ require('lazy').setup({
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          ['<CR>'] = cmp.mapping.confirm { select = true },
+          ['<S-CR>'] = cmp.mapping.confirm { select = false },
+          ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
-          ['<C-Space>'] = cmp.mapping.complete {},
+
+          -- Toggle cmp window
+          ["<C-Space>"] = cmp.mapping({
+            i = function()
+              if cmp.visible() then
+                cmp.abort()
+              else
+                cmp.complete()
+              end
+            end,
+            c = function()
+              if cmp.visible() then
+                cmp.close()
+              else
+                cmp.complete()
+              end
+            end,
+          }),
 
           -- Think of <c-l> as moving to the right of your snippet expansion.
           --  So if you have a snippet that's like:
@@ -810,7 +846,77 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'cmp_ai' },
         },
+
+        formatting = {
+          fields = {"kind", "abbr", "menu" },
+          format = function(entry, vim_item)
+            local item = entry:get_completion_item()
+      
+            function trim(text, len)
+              local max = len
+              if text and text:len() > max then
+                text = text:sub(1, max-3) .. "..."
+              end
+              return text
+            end
+      
+            local from = ""
+            if item.documentation and entry.source.name == "nvim_lsp" then
+                if entry.source.source.client.name == "clangd" then
+                from = item.documentation.value
+                from = string.match(from, "%w*%.%w*");
+                from = string.format(" (%s)", from)
+                from = trim(from, 20)
+              end
+            end
+      
+            local type = ""
+            if item.detail and entry.source.name == "nvim_lsp" then
+              if entry.source.source.client.name == "clangd" then
+                type = item.detail
+                type = type:gsub("(%w*::)", "")
+                type = type:gsub("unique_ptr", "u*")
+      
+                if type:len() > 20 then
+                  type = type:sub(1, 20)
+                end
+                type = string.format(" (%s)", type)
+              end
+            end
+      
+            vim_item.abbr = trim(vim_item.abbr, 60)
+            local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+            --vim_item.kind = string.format("%s%s", icons[vim_item.kind], type)
+            local strings = vim.split(kind.kind, "%s", { trimempty = true })
+            kind.kind = " " .. (strings[1] or "") .. type .. " "
+            vim_item.menu = string.format("%s%s", ({
+              luasnip = "[SNP]",
+              nvim_lsp = "[LSP]",
+              buffer = "[BUF]",
+              nvim_lua = "[Lua]",
+              cmp_ai = '[AI]',
+              path = "[PTH]",
+            })[entry.source.name], from)
+      
+      
+            if entry.source.name == 'cmp_ai' then
+              local detail = (entry.completion_item.labelDetails or {}).detail
+              vim_item.kind = ''
+              if detail and detail:find('.*%%.*') then
+                vim_item.kind = vim_item.kind .. ' ' .. detail
+              end
+      
+              if (entry.completion_item.data or {}).multiline then
+                vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
+              end
+            end
+      
+            return vim_item
+          end,
+        },
+
       }
     end,
   },
@@ -877,7 +983,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'cpp', 'c_sharp', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'python', 'rust', 'glsl', 'xml' },
+      ensure_installed = { 'bash', 'c', 'cpp', 'c_sharp', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'python', 'rust', 'glsl', 'xml', 'csv', 'make', 'cmake' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -916,9 +1022,9 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+   require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
@@ -953,39 +1059,43 @@ require('lazy').setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
--- local function lsp_progress()
---   local messages = vim.lsp.status()
---   -- if #messages == 0 then
---   --   return
---   -- end
---   return messages
---   -- local status = {}
---   -- for _, msg in pairs(messages) do
---   --   table.insert(status, (msg.percentage or 0) .. "%% " .. (msg.title or ""))
---   -- end
---   -- local spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
---   -- local ms = vim.loop.hrtime() / 1000000
---   -- local frame = math.floor(ms / 120) % #spinners
---   -- return table.concat(status, " | ") .. " " .. spinners[frame + 1]
--- end
+local function lsp_progress()
+  --local messages = vim.lsp.util.get_progress_messages()
+  local messages = vim.lsp.status()
+  if #messages == 0 then
+    return
+  end
+  local status = {}
+  for _, msg in pairs(messages) do
+    table.insert(status, (msg.percentage or 0) .. "%% " .. (msg.title or ""))
+  end
+  local spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+  local ms = vim.loop.hrtime() / 1000000
+  local frame = math.floor(ms / 120) % #spinners
+  return table.concat(status, " | ") .. " " .. spinners[frame + 1]
+end
 
-require('custom.onedark').setup {}
-require('lualine').setup {
-  -- sections = {
-  --   lualine_a = {'mode'},
-  --   lualine_b = {'branch', 'diff', 'diagnostics'},
-  --   --lualine_c = {'filename'},
-  --   lualine_x = {lsp_progress()},
-  --   --lualine_x = {'encoding', 'fileformat', 'filetype'},
-  --   lualine_y = {'progress'},
-  --   lualine_z = {'location'}
-  -- },
-  -- inactive_sections = {
-  --   lualine_a = {},
-  --   lualine_b = {},
-  --   lualine_c = {'filename'},
-  --   --lualine_x = {'location'},
-  --   lualine_x = {lsp_progress()},
-  --   lualine_z = {}
-  -- },
-}
+require('custom.onedark').setup({})
+require('lualine').setup(
+  {
+    sections = {
+      lualine_a = {'mode'},
+      lualine_b = {'branch', 'diff', 'diagnostics'},
+      lualine_c = {'filename'},    
+      --lualine_x = {lsp_progress()},
+      lualine_x = {'encoding', 'fileformat', 'filetype'},
+      lualine_y = {'progress'},
+      lualine_z = {'location'}
+    },
+    inactive_sections = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {'filename'},
+      --lualine_x = {'location'},
+      lualine_x = {lsp_progress()},
+      lualine_z = {}
+    },
+  }
+)
+
+require('custom.custom_init')
