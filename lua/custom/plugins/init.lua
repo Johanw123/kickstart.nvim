@@ -167,4 +167,5 @@ return {
   {
     "k-takata/vim-nsis"
   },
+
 }
