@@ -18,6 +18,8 @@ opt.smartindent = true
 opt.tabstop = 2
 opt.softtabstop = 2
 
+opt.linespace = 5
+
 vim.g.mapleader = " "
 
 if vim.g.neovide then
@@ -33,6 +35,44 @@ if vim.g.neovide then
 
 	vim.g.neovide_refresh_rate = 165
 	vim.g.neovide_cursor_animation_length = 0
+end
+
+if vim.fn.has("wsl") == 1 then
+  package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
+  package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
+  package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/magick/init.lua;"
+
+  -- vim.opt.shell = "kitty"
+  -- vim.opt.shellcmdflag = "--detach"
+  vim.opt.shell = "zsh"
+elseif vim.fn.has('win32') == 1 and vim.fn.has("wsl") == 0 then
+	local powershell_options = {
+		shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+		shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+		shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+		shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+		shellquote = "",
+		shellxquote = "",
+	}
+
+	for option, value in pairs(powershell_options) do
+		vim.opt[option] = value
+	end
+
+  package.path = package.path .. ";" .. vim.fn.expand("$APPDATA") .. "\\LuaRocks\\share\\lua\\5.1\\?\\init.lua;"
+  package.path = package.path .. ";" .. vim.fn.expand("$APPDATA") .. "\\LuaRocks\\share\\lua\\5.1\\?.lua;"
+
+  local avalonia_lsp_bin = "C:\\Users\\johanw\\.vscode\\extensions\\avaloniateam.vscode-avalonia-0.0.31\\avaloniaServer\\AvaloniaLanguageServer.dll"
+
+  vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"},{ pattern = {"*.axaml"}, callback =
+    function()
+      vim.cmd.setfiletype("xml")
+      vim.lsp.start({
+        name = "Avalonia LSP",
+        cmd = { "dotnet", avalonia_lsp_bin },
+        root_dir = vim.fn.getcwd(),
+      })
+    end})
 end
 
 local highlight = {
@@ -94,6 +134,13 @@ local highlight = {
   -- vim.keymap.set('n', '<leader>p', 'lua require("precognition").peek()', { desc = 'Move focus to the upper window' })
   vim.keymap.set('n', '<leader>tp', '<cmd> lua require("precognition").toggle()<cr>', { desc = 'Toggle Precognition' })
 
+  -- Set keymap for <leader>tt to run !start powershell and cmd to the current working directory
+  vim.keymap.set("n", "<leader>tt", function()
+      -- get cwd and run cmd
+      local cwd = vim.fn.getcwd()
+      vim.fn.system { 'cmd', '/c','start', 'pwsh', '-NoExit'}
+      end, { noremap = true, silent = true, desc = "Start powershell" 
+  })
 
   -- vim.keymap.set('n', '<leader>lt', 
   --   function()      
