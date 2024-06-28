@@ -92,7 +92,7 @@ local highlight = {
 
 -- Precognition
   -- vim.keymap.set('n', '<leader>p', 'lua require("precognition").peek()', { desc = 'Move focus to the upper window' })
-  vim.keymap.set('n', '<leader>tp', '<cmd> lua require("precognition").toggle()<cr>', { desc = 'Move focus to the upper window' })
+  vim.keymap.set('n', '<leader>tp', '<cmd> lua require("precognition").toggle()<cr>', { desc = 'Toggle Precognition' })
 
 
   -- vim.keymap.set('n', '<leader>lt', 
@@ -151,3 +151,7 @@ local highlight = {
     --     ["textdocument/definition"] = require('omnisharp_extended').handler,
     --   }
     -- })
+
+
+    -- set default off
+    require("precognition").toggle()
