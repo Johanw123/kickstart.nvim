@@ -167,6 +167,10 @@ return {
   },
 
   {
+    "sindrets/diffview.nvim"
+  },
+
+  {
    "tris203/precognition.nvim",
       --event = "VeryLazy",
       config = {
