@@ -192,5 +192,9 @@ return {
       --     NextParagraph = { text = "}", prio = 8 },
       -- },
       },
-    }
+    },
+  {
+    "Johanw123/avalonia.nvim",
+  },
+
 }
