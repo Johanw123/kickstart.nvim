@@ -206,6 +206,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+ -- put this in your main init.lua file ( before lazy setup )
+ vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46_cache/"
+
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -281,23 +285,43 @@ require('lazy').setup({
     config = function() -- This is the function that runs, AFTER loading
       require('which-key').setup()
 
-      -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>t'] = { name = '[T]erminal', _ = 'which_key_ignore' },
-        -- ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
-        --['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+      require('which-key').add
+      {
+        { "<leader>c", group = "[C]ode" },
+        { "<leader>c_", hidden = true },
+        { "<leader>d", group = "[D]ocument" },
+        { "<leader>d_", hidden = true },
+        { "<leader>r", group = "[R]ename" },
+        { "<leader>r_", hidden = true },
+        { "<leader>s", group = "[S]earch" },
+        { "<leader>s_", hidden = true },
+        { "<leader>t", group = "[T]erminal" },
+        { "<leader>t_", hidden = true },
+        { "<leader>w", group = "[W]orkspace" },
+        { "<leader>w_", hidden = true },
       }
+    
+
+      -- Document existing key chains
+      -- require('which-key').add {
+      --   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
+      --   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
+      --   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
+      --   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
+      --   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+      --   ['<leader>t'] = { name = '[T]erminal', _ = 'which_key_ignore' },
+      --   -- ['<leader>h'] = { name = '[H]arpoon', _ = 'which_key_ignore' },
+      --   --['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+      -- }
       -- visual mode
       -- require('which-key').register({
       --   ['<leader>h'] = { 'Git [H]unk' },
       -- }, { mode = 'v' })
     end,
   },
+
+
+
 
   -- NOTE: Plugins can specify dependencies.
   --
@@ -1056,43 +1080,52 @@ require('lazy').setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
-local function lsp_progress()
-  --local messages = vim.lsp.util.get_progress_messages()
-  local messages = vim.lsp.status()
-  if #messages == 0 then
-    return
-  end
-  local status = {}
-  for _, msg in pairs(messages) do
-    table.insert(status, (msg.percentage or 0) .. "%% " .. (msg.title or ""))
-  end
-  local spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-  local ms = vim.loop.hrtime() / 1000000
-  local frame = math.floor(ms / 120) % #spinners
-  return table.concat(status, " | ") .. " " .. spinners[frame + 1]
+-- local function lsp_progress()
+--   --local messages = vim.lsp.util.get_progress_messages()
+--   local messages = vim.lsp.status()
+--   if #messages == 0 then
+--     return
+--   end
+--   local status = {}
+--   for _, msg in pairs(messages) do
+--     table.insert(status, (msg.percentage or 0) .. "%% " .. (msg.title or ""))
+--   end
+--   local spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+--   local ms = vim.loop.hrtime() / 1000000
+--   local frame = math.floor(ms / 120) % #spinners
+--   return table.concat(status, " | ") .. " " .. spinners[frame + 1]
+-- end
+
+--require('custom.onedark').setup({})
+-- require('lualine').setup(
+--   {
+--     sections = {
+--       lualine_a = {'mode'},
+--       lualine_b = {'branch', 'diff', 'diagnostics'},
+--       lualine_c = {'filename'},    
+--       --lualine_x = {lsp_progress()},
+--       lualine_x = {'encoding', 'fileformat', 'filetype'},
+--       lualine_y = {'progress'},
+--       lualine_z = {'location'}
+--     },
+--     inactive_sections = {
+--       lualine_a = {},
+--       lualine_b = {},
+--       lualine_c = {'filename'},
+--       --lualine_x = {'location'},
+--       lualine_x = {lsp_progress()},
+--       lualine_z = {}
+--     },
+--   }
+-- )
+
+
+-- To load all integrations at once
+for _, v in ipairs(vim.fn.readdir(vim.g.base46_cache)) do
+  dofile(vim.g.base46_cache .. v)
 end
 
-require('custom.onedark').setup({})
-require('lualine').setup(
-  {
-    sections = {
-      lualine_a = {'mode'},
-      lualine_b = {'branch', 'diff', 'diagnostics'},
-      lualine_c = {'filename'},    
-      --lualine_x = {lsp_progress()},
-      lualine_x = {'encoding', 'fileformat', 'filetype'},
-      lualine_y = {'progress'},
-      lualine_z = {'location'}
-    },
-    inactive_sections = {
-      lualine_a = {},
-      lualine_b = {},
-      lualine_c = {'filename'},
-      --lualine_x = {'location'},
-      lualine_x = {lsp_progress()},
-      lualine_z = {}
-    },
-  }
-)
+
 
 require('custom.custom_init')
+--require('chadrc')
