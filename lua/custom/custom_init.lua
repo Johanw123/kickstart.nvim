@@ -161,6 +161,20 @@ vim.keymap.set('n', '<leader>o', function()
   vim.fn.system { 'cmd', '/c', 'explorer', path }
 end, { desc = 'Explore file location' })
 
+
+
+
+vim.keymap.set({ "n", "t" }, "<A-i>", function()
+     require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
+ end)
+
+vim.keymap.set({ "n", "t" }, "<A-h>", function()
+     require("nvchad.term").toggle { pos = "sp", id = "horizontalSplitTerm", size=0.4 }
+ end)
+
+vim.keymap.set({ "n", "t" }, "<A-v>", function()
+       require("nvchad.term").toggle { pos = "vsp", id = "verticalSplitTerm", size=0.4 }
+ end)
 -- require('which-key').register {
 --   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
 --   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
