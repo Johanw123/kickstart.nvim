@@ -55,7 +55,7 @@ return {
       'ibhagwan/fzf-lua', -- optional
     },
     config = true,
-    lazy = false,
+    lazy = true,
   },
   {
     'stevearc/oil.nvim',
@@ -78,6 +78,7 @@ return {
 
   {
     'stevearc/aerial.nvim',
+    lazy = true,
     opts = {},
     -- Optional dependencies
     dependencies = {
@@ -85,8 +86,81 @@ return {
       'nvim-tree/nvim-web-devicons',
     },
   },
+  {
+    'lewis6991/satellite.nvim',
+  },
+  -- {
+  --   'gorbit99/codewindow.nvim',
+  --   config = function()
+  --     local codewindow = require 'codewindow'
+  --     codewindow.setup()
+  --     codewindow.apply_default_keybinds()
+  --   end,
+  -- },
+  -- { 'echasnovski/mini.map', version = false },
 
-  { 'echasnovski/mini.map', version = false },
+  -- ---@module "neominimap.config.meta"
+  -- {
+  --   'Isrothy/neominimap.nvim',
+  --   version = 'v3.*.*',
+  --   enabled = true,
+  --   lazy = false, -- NOTE: NO NEED to Lazy load
+  --   -- Optional
+  --   keys = {
+  --     -- Global Minimap Controls
+  --     { '<leader>nm', '<cmd>Neominimap toggle<cr>', desc = 'Toggle global minimap' },
+  --     { '<leader>no', '<cmd>Neominimap on<cr>', desc = 'Enable global minimap' },
+  --     { '<leader>nc', '<cmd>Neominimap off<cr>', desc = 'Disable global minimap' },
+  --     { '<leader>nr', '<cmd>Neominimap refresh<cr>', desc = 'Refresh global minimap' },
+  --
+  --     -- Window-Specific Minimap Controls
+  --     { '<leader>nwt', '<cmd>Neominimap winToggle<cr>', desc = 'Toggle minimap for current window' },
+  --     { '<leader>nwr', '<cmd>Neominimap winRefresh<cr>', desc = 'Refresh minimap for current window' },
+  --     { '<leader>nwo', '<cmd>Neominimap winOn<cr>', desc = 'Enable minimap for current window' },
+  --     { '<leader>nwc', '<cmd>Neominimap winOff<cr>', desc = 'Disable minimap for current window' },
+  --
+  --     -- Tab-Specific Minimap Controls
+  --     { '<leader>ntt', '<cmd>Neominimap tabToggle<cr>', desc = 'Toggle minimap for current tab' },
+  --     { '<leader>ntr', '<cmd>Neominimap tabRefresh<cr>', desc = 'Refresh minimap for current tab' },
+  --     { '<leader>nto', '<cmd>Neominimap tabOn<cr>', desc = 'Enable minimap for current tab' },
+  --     { '<leader>ntc', '<cmd>Neominimap tabOff<cr>', desc = 'Disable minimap for current tab' },
+  --
+  --     -- Buffer-Specific Minimap Controls
+  --     { '<leader>nbt', '<cmd>Neominimap bufToggle<cr>', desc = 'Toggle minimap for current buffer' },
+  --     { '<leader>nbr', '<cmd>Neominimap bufRefresh<cr>', desc = 'Refresh minimap for current buffer' },
+  --     { '<leader>nbo', '<cmd>Neominimap bufOn<cr>', desc = 'Enable minimap for current buffer' },
+  --     { '<leader>nbc', '<cmd>Neominimap bufOff<cr>', desc = 'Disable minimap for current buffer' },
+  --
+  --     ---Focus Controls
+  --     { '<leader>nf', '<cmd>Neominimap focus<cr>', desc = 'Focus on minimap' },
+  --     { '<leader>nu', '<cmd>Neominimap unfocus<cr>', desc = 'Unfocus minimap' },
+  --     { '<leader>ns', '<cmd>Neominimap toggleFocus<cr>', desc = 'Switch focus on minimap' },
+  --   },
+  --   init = function()
+  --     -- The following options are recommended when layout == "float"
+  --     vim.opt.wrap = false
+  --     vim.opt.sidescrolloff = 36 -- Set a large value
+  --
+  --     --- Put your configuration here
+  --     ---@type Neominimap.UserConfig
+  --     vim.g.neominimap = {
+  --       auto_enable = true,
+  --       x_multiplier = 4,
+  --       y_multiplier = 1,
+  --       layout = 'float',
+  --       float = {
+  --         z_index = 10,
+  --         window_border = 'single',
+  --         margin = {
+  --           right = 4,
+  --         },
+  --       },
+  --       win_filter = function(winid)
+  --         return winid == vim.api.nvim_get_current_win()
+  --       end,
+  --     }
+  --   end,
+  -- },
 
   {
     'ThePrimeagen/harpoon',
@@ -131,24 +205,24 @@ return {
       }
     end,
   },
-  {
-    'karb94/neoscroll.nvim',
-    lazy = false,
-    config = function()
-      require('neoscroll').setup {
-        -- All these keys will be mapped to their corresponding default scrolling animation
-        mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb' },
-        hide_cursor = true, -- Hide cursor while scrolling
-        stop_eof = true, -- Stop at <EOF> when scrolling downwards
-        use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
-        respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-        cursor_scrolls_alone = false, -- The cursor will keep on scrolling even if the window cannot scroll further
-        easing_function = 'quintic', -- Default easing function
-        pre_hook = nil, -- Function to run before the scrolling animation starts
-        post_hook = nil, -- Function to run after the scrolling animation ends
-      }
-    end,
-  },
+  -- {
+  --   'karb94/neoscroll.nvim',
+  --   lazy = false,
+  --   config = function()
+  --     require('neoscroll').setup {
+  --       -- All these keys will be mapped to their corresponding default scrolling animation
+  --       mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb' },
+  --       hide_cursor = true, -- Hide cursor while scrolling
+  --       stop_eof = true, -- Stop at <EOF> when scrolling downwards
+  --       use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
+  --       respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+  --       cursor_scrolls_alone = false, -- The cursor will keep on scrolling even if the window cannot scroll further
+  --       easing_function = 'quintic', -- Default easing function
+  --       pre_hook = nil, -- Function to run before the scrolling animation starts
+  --       post_hook = nil, -- Function to run after the scrolling animation ends
+  --     }
+  --   end,
+  -- },
   {
     'folke/flash.nvim',
   },
@@ -243,4 +317,17 @@ return {
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
   },
+
+  {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        -- config
+      }
+    end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
+  },
+
+  { 'NvChad/nvim-colorizer.lua' },
 }

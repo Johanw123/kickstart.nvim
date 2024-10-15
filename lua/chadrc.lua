@@ -17,5 +17,8 @@ M.base46 = {
   theme_toggle = { 'onedark', 'one_light' },
 }
 
-return M
+M.ui = {
+  telescope = { style = 'bordered' }, -- borderless / bordered
+}
 
+return M

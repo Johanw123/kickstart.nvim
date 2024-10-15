@@ -135,6 +135,7 @@ end, { desc = '[H]elp' })
 vim.keymap.set('n', '<leader>cd', require('telescope').extensions.zoxide.list, { desc = '[C]hange [D]irectory' })
 --vim.keymap.set("n", "<leader>fs", function() require('telescope.builtin').grep_string() end, {desc = "[F]ind [S]tring"})
 -- vim.keymap.set("n", "<leader>fr", function() require('telescope.builtin').lsp_references() end, {desc = "[F]ind [R]eferences"})
+vim.keymap.set('n', '<leader>sa', require('telescope').extensions.aerial.aerial, { desc = '[S]earch [A]erial' })
 
 vim.keymap.set('n', '<Leader>pf', 'i<C-r><C-o>+<ESC>l=`[`]$', { desc = 'Paste block and indent' })
 
@@ -374,12 +375,16 @@ vim.api.nvim_set_hl(0, 'DefaultClassType', { fg = '#009432' })
 
 vim.api.nvim_set_hl(0, 'FlashLabel', { bg = '#82ccdd', fg = '#000000', standout = true, bold = true })
 
-local map = require 'mini.map'
-map.setup {
-  integrations = {
-    map.gen_integration.builtin_search(),
-    map.gen_integration.diff(),
-    map.gen_integration.diagnostic(),
-    map.gen_integration.gitsigns(),
-  },
-}
+vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#82ccdd' })
+
+vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = '#82ccdd' })
+
+-- local map = require 'mini.map'
+-- map.setup {
+--   integrations = {
+--     map.gen_integration.builtin_search(),
+--     map.gen_integration.diff(),
+--     map.gen_integration.diagnostic(),
+--     map.gen_integration.gitsigns(),
+--   },
+-- }
