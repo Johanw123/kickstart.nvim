@@ -154,8 +154,6 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
-
-
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -206,9 +204,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
- -- put this in your main init.lua file ( before lazy setup )
- vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46_cache/"
-
+-- put this in your main init.lua file ( before lazy setup )
+vim.g.base46_cache = vim.fn.stdpath 'data' .. '/base46_cache/'
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -285,22 +282,20 @@ require('lazy').setup({
     config = function() -- This is the function that runs, AFTER loading
       require('which-key').setup()
 
-      require('which-key').add
-      {
-        { "<leader>c", group = "[C]ode" },
-        { "<leader>c_", hidden = true },
-        { "<leader>d", group = "[D]ocument" },
-        { "<leader>d_", hidden = true },
-        { "<leader>r", group = "[R]ename" },
-        { "<leader>r_", hidden = true },
-        { "<leader>s", group = "[S]earch" },
-        { "<leader>s_", hidden = true },
-        { "<leader>t", group = "[T]erminal" },
-        { "<leader>t_", hidden = true },
-        { "<leader>w", group = "[W]orkspace" },
-        { "<leader>w_", hidden = true },
+      require('which-key').add {
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>c_', hidden = true },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>d_', hidden = true },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>r_', hidden = true },
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>s_', hidden = true },
+        { '<leader>t', group = '[T]erminal' },
+        { '<leader>t_', hidden = true },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>w_', hidden = true },
       }
-    
 
       -- Document existing key chains
       -- require('which-key').add {
@@ -320,9 +315,6 @@ require('lazy').setup({
     end,
   },
 
-
-
-
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
@@ -339,10 +331,9 @@ require('lazy').setup({
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
 
-        "jvgrootveld/telescope-zoxide",
-        "mollerhoj/telescope-recent-files.nvim",
-        "nvim-telescope/telescope-project.nvim",
-
+        'jvgrootveld/telescope-zoxide',
+        'mollerhoj/telescope-recent-files.nvim',
+        'nvim-telescope/telescope-project.nvim',
 
         -- `build` is used to run some command when the plugin is installed/updated.
         -- This is only run then, not every time Neovim starts up.
@@ -396,11 +387,11 @@ require('lazy').setup({
             find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' },
           },
           grep_string = {
-            additional_args = {'--hidden'}
+            additional_args = { '--hidden' },
           },
           live_grep = {
-            additional_args = {'--hidden'}
-          }
+            additional_args = { '--hidden' },
+          },
         },
         extensions = {
           ['ui-select'] = {
@@ -573,30 +564,33 @@ require('lazy').setup({
             })
           end
 
-
           -- The following autocommand is used to enable inlay hints in your
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
 
-          if client.name == "clangd" then
-            require("clangd_extensions").setup()
-            require("clangd_extensions.inlay_hints").setup_autocmd()
-            require("clangd_extensions.inlay_hints").set_inlay_hints()
+          if client.name == 'clangd' then
+            require('clangd_extensions').setup()
+            -- require('clangd_extensions.inlay_hints').setup_autocmd()
+            -- require('clangd_extensions.inlay_hints').set_inlay_hints()
 
-            map('<leader>lt', function() require("clangd_extensions.inlay_hints").toggle_inlay_hints() end, '[T]oggle Hints')
+            map('<leader>th', function()
+              require('clangd_extensions.inlay_hints').toggle_inlay_hints()
+            end, '[T]oggle Hints')
           else
             if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-              map('<leader>lt', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, '[T]oggle Hints')
+              map('<leader>th', function()
+                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+              end, '[T]oggle Hints')
             end
           end
 
-           -- vim.keymap.set('n', '<leader>lt', 
-  --   function()      
-  --     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-  --       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-  --     end
-  --   end, { desc = '[T]oggle Hints' })
+          -- vim.keymap.set('n', '<leader>lt',
+          --   function()
+          --     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          --       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+          --     end
+          --   end, { desc = '[T]oggle Hints' })
         end,
       })
 
@@ -625,14 +619,14 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-         clangd = {},
-         cpptools = {},
-         pyright = {},
-         rust_analyzer = {},
-         powershell_es = {},
-         shellcheck = {},
-         shellharden = {},
-         --roslyn = {},
+        clangd = {},
+        cpptools = {},
+        pyright = {},
+        rust_analyzer = {},
+        powershell_es = {},
+        shellcheck = {},
+        shellharden = {},
+        --roslyn = {},
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -659,17 +653,14 @@ require('lazy').setup({
         },
       }
 
-      require("roslyn").setup({
-        on_attach = function(client, buffer)
-          
-        end,
+      require('roslyn').setup {
+        on_attach = function(client, buffer) end,
         capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities),
         handlers = {
-          ["textdocument/definition"] = require('omnisharp_extended').handler,
-        }
-      })
+          ['textdocument/definition'] = require('omnisharp_extended').handler,
+        },
+      }
 
-    
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -695,11 +686,11 @@ require('lazy').setup({
             -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
 
-            if server_name == "clangd" then
+            if server_name == 'clangd' then
               capabilities.offsetEncoding = 'utf-16'
             end
 
-            require('lspconfig')[server_name].setup(server)    
+            require('lspconfig')[server_name].setup(server)
           end,
         },
       }
@@ -755,7 +746,7 @@ require('lazy').setup({
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
           --if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-           -- return
+          -- return
           --end
           return 'make install_jsregexp'
         end)(),
@@ -824,7 +815,7 @@ require('lazy').setup({
           --  completions whenever it has completion options available.
 
           -- Toggle cmp window
-          ["<C-Space>"] = cmp.mapping({
+          ['<C-Space>'] = cmp.mapping {
             i = function()
               if cmp.visible() then
                 cmp.abort()
@@ -839,7 +830,7 @@ require('lazy').setup({
                 cmp.complete()
               end
             end,
-          }),
+          },
 
           -- Think of <c-l> as moving to the right of your snippet expansion.
           --  So if you have a snippet that's like:
@@ -871,73 +862,75 @@ require('lazy').setup({
         },
 
         formatting = {
-          fields = {"kind", "abbr", "menu" },
+          fields = { 'kind', 'abbr', 'menu' },
           format = function(entry, vim_item)
             local item = entry:get_completion_item()
-      
+
             function trim(text, len)
               local max = len
               if text and text:len() > max then
-                text = text:sub(1, max-3) .. "..."
+                text = text:sub(1, max - 3) .. '...'
               end
               return text
             end
-      
-            local from = ""
-            if item.documentation and entry.source.name == "nvim_lsp" then
-                if entry.source.source.client.name == "clangd" then
+
+            local from = ''
+            if item.documentation and entry.source.name == 'nvim_lsp' then
+              if entry.source.source.client.name == 'clangd' then
                 from = item.documentation.value
-                from = string.match(from, "%w*%.%w*");
-                from = string.format(" (%s)", from)
+                from = string.match(from, '%w*%.%w*')
+                from = string.format(' (%s)', from)
                 from = trim(from, 20)
               end
             end
-      
-            local type = ""
-            if item.detail and entry.source.name == "nvim_lsp" then
-              if entry.source.source.client.name == "clangd" then
+
+            local type = ''
+            if item.detail and entry.source.name == 'nvim_lsp' then
+              if entry.source.source.client.name == 'clangd' then
                 type = item.detail
-                type = type:gsub("(%w*::)", "")
-                type = type:gsub("unique_ptr", "u*")
-      
+                type = type:gsub('(%w*::)', '')
+                type = type:gsub('unique_ptr', 'u*')
+
                 if type:len() > 20 then
                   type = type:sub(1, 20)
                 end
-                type = string.format(" (%s)", type)
+                type = string.format(' (%s)', type)
               end
             end
-      
+
             vim_item.abbr = trim(vim_item.abbr, 60)
-            local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+            local kind = require('lspkind').cmp_format { mode = 'symbol_text', maxwidth = 50 }(entry, vim_item)
             --vim_item.kind = string.format("%s%s", icons[vim_item.kind], type)
-            local strings = vim.split(kind.kind, "%s", { trimempty = true })
-            kind.kind = " " .. (strings[1] or "") .. type .. " "
-            vim_item.menu = string.format("%s%s", ({
-              luasnip = "[SNP]",
-              nvim_lsp = "[LSP]",
-              buffer = "[BUF]",
-              nvim_lua = "[Lua]",
-              cmp_ai = '[AI]',
-              path = "[PTH]",
-            })[entry.source.name], from)
-      
-      
+            local strings = vim.split(kind.kind, '%s', { trimempty = true })
+            kind.kind = ' ' .. (strings[1] or '') .. type .. ' '
+            vim_item.menu = string.format(
+              '%s%s',
+              ({
+                luasnip = '[SNP]',
+                nvim_lsp = '[LSP]',
+                buffer = '[BUF]',
+                nvim_lua = '[Lua]',
+                cmp_ai = '[AI]',
+                path = '[PTH]',
+              })[entry.source.name],
+              from
+            )
+
             if entry.source.name == 'cmp_ai' then
               local detail = (entry.completion_item.labelDetails or {}).detail
               vim_item.kind = ''
-              if detail and detail:find('.*%%.*') then
+              if detail and detail:find '.*%%.*' then
                 vim_item.kind = vim_item.kind .. ' ' .. detail
               end
-      
+
               if (entry.completion_item.data or {}).multiline then
                 vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
               end
             end
-      
+
             return vim_item
           end,
         },
-
       }
     end,
   },
@@ -1004,7 +997,25 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'cpp', 'c_sharp', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'python', 'rust', 'glsl', 'xml', 'csv', 'make', 'cmake' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'cpp',
+        'c_sharp',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'vim',
+        'vimdoc',
+        'python',
+        'rust',
+        'glsl',
+        'xml',
+        'csv',
+        'make',
+        'cmake',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1043,9 +1054,9 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-   require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-   require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
@@ -1102,7 +1113,7 @@ require('lazy').setup({
 --     sections = {
 --       lualine_a = {'mode'},
 --       lualine_b = {'branch', 'diff', 'diagnostics'},
---       lualine_c = {'filename'},    
+--       lualine_c = {'filename'},
 --       --lualine_x = {lsp_progress()},
 --       lualine_x = {'encoding', 'fileformat', 'filetype'},
 --       lualine_y = {'progress'},
@@ -1119,13 +1130,11 @@ require('lazy').setup({
 --   }
 -- )
 
-
 -- To load all integrations at once
 for _, v in ipairs(vim.fn.readdir(vim.g.base46_cache)) do
   dofile(vim.g.base46_cache .. v)
 end
 
-
-
-require('custom.custom_init')
+require 'custom.custom_init'
 --require('chadrc')
+

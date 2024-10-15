@@ -8,8 +8,8 @@ return {
   --   dependencies = { 'nvim-tree/nvim-web-devicons' },
   -- },
   {
-    "nvim-tree/nvim-web-devicons",
-    enabled = true,                
+    'nvim-tree/nvim-web-devicons',
+    enabled = true,
   },
   {
     'nvim-tree/nvim-tree.lua',
@@ -66,13 +66,28 @@ return {
       require('oil').setup()
     end,
   },
+
+  -- {
+  --   'petertriho/nvim-scrollbar',
+  --   lazy = false,
+  --   config = function()
+  --     require('scrollbar').setup()
+  --   end,
+  -- },
+  --
+
   {
-    'petertriho/nvim-scrollbar',
-    lazy = false,
-    config = function()
-      require('scrollbar').setup()
-    end,
+    'stevearc/aerial.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
+    },
   },
+
+  { 'echasnovski/mini.map', version = false },
+
   {
     'ThePrimeagen/harpoon',
   },
@@ -226,6 +241,6 @@ return {
     opts = {},
     --dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
   },
 }
