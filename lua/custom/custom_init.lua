@@ -7,6 +7,8 @@ opt.wrap = false
 opt.cmdheight = 0
 vim.g.have_nerd_font = true
 
+opt.fillchars = { eob = ' ' }
+
 vim.g.OmniSharp_highlighting = 1
 vim.g.OmniSharp_server_use_net6 = 1
 vim.g.OmniSharp_selector_ui = 'fzf'
@@ -23,6 +25,8 @@ opt.softtabstop = 2
 opt.linespace = 5
 
 vim.g.mapleader = ' '
+
+-- vim.g.indenltine_filetype_exclude = { 'help', 'dashboard', 'packer' }
 
 if vim.g.neovide then
   --vim.g.neovide_transparency = 0.9
@@ -93,7 +97,30 @@ end)
 --   hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
 --   hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_tab_indent_level)
 
-require('ibl').setup { indent = { highlight = highlight, char = '│' } }
+require('ibl').setup {
+  indent = {
+    highlight = highlight,
+    char = '│',
+  },
+  exclude = {
+    filetypes = {
+      'help',
+      'startify',
+      'aerial',
+      'alpha',
+      'dashboard',
+      'packer',
+      'neogitstatus',
+      'NvimTree',
+      'neo-tree',
+      'Trouble',
+    },
+    buftypes = {
+      'nofile',
+      'terminal',
+    },
+  },
+}
 
 vim.keymap.set('n', 'go', '<Cmd>ClangdSwitchSourceHeader<CR>', { desc = 'Switch header/source (C++)' })
 
@@ -378,6 +405,7 @@ vim.api.nvim_set_hl(0, 'FlashLabel', { bg = '#82ccdd', fg = '#000000', standout 
 vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#82ccdd' })
 
 vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = '#82ccdd' })
+-- vim.api.nvim_set_hl(0, 'DashboardHeader', { fg = '#82ccdd' })
 
 -- local map = require 'mini.map'
 -- map.setup {

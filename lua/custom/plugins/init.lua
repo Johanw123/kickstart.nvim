@@ -294,6 +294,15 @@ return {
   },
   {
     'Johanw123/avalonia.nvim',
+    -- config = function()
+    --   require('avalonia').setup {
+    --     openUrlCommand = nil, -- start/open/xdg-open
+    --     forced_browser = nil, -- firefox/chrome/msedge etc
+    --     displayMethod = 'html', -- html/kitty(not implemented yet)
+    --     tcp_port = 27016, -- port for connecting to avalonia preview rendering process, leave as 0 to let OS decide
+    --     debug = true,
+    --   }
+    -- end,
   },
 
   {
@@ -323,7 +332,35 @@ return {
     event = 'VimEnter',
     config = function()
       require('dashboard').setup {
-        -- config
+        theme = 'hyper',
+        config = {
+          week_header = {
+            enable = true,
+          },
+          shortcut = {
+            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+            {
+              icon = ' ',
+              icon_hl = '@variable',
+              desc = 'Files',
+              group = 'Label',
+              action = 'Telescope find_files',
+              key = 'f',
+            },
+            {
+              desc = ' Apps',
+              group = 'DiagnosticHint',
+              action = 'Telescope app',
+              key = 'a',
+            },
+            {
+              desc = ' dotfiles',
+              group = 'Number',
+              action = 'Telescope dotfiles',
+              key = 'd',
+            },
+          },
+        },
       }
     end,
     dependencies = { { 'nvim-tree/nvim-web-devicons' } },
