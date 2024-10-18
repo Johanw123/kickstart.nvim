@@ -305,6 +305,12 @@ return {
     -- end,
   },
 
+
+  {
+  'stevearc/dressing.nvim',
+  opts = {},
+},
+
   {
     'nvchad/ui',
     config = function()
