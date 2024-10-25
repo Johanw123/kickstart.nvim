@@ -232,27 +232,23 @@ vim.keymap.set('n', '<leader>th', function()
   end
 end, { desc = '[T]oggle [H]ints' })
 
-
-
 vim.keymap.set('n', '<leader>dn', function()
-  vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR, wrap = true})
+  vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR, wrap = true }
 end, { desc = ' Diagnostics Next' })
 
 vim.keymap.set('n', ']e', function()
-  vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR, wrap = true})
+  vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR, wrap = true }
 end, { desc = ' Diagnostics Next' })
 
 vim.keymap.set('n', '[e', function()
-  vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR, wrap = true})
+  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR, wrap = true }
 end, { desc = ' Diagnostics Next' })
 
 vim.keymap.set('n', '<leader>dN', function()
-  vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR, wrap = true})
+  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR, wrap = true }
 end, { desc = ' Diagnostics Next (Backwards)' })
 
-
-
-
+vim.keymap.set({ 'v', 'n' }, '<leader>ca', require('actions-preview').code_actions, { desc = 'Code Actions' })
 
 -- keys = {
 --   {

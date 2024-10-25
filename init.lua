@@ -533,7 +533,7 @@ require('lazy').setup({
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          -- map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
@@ -626,6 +626,7 @@ require('lazy').setup({
         powershell_es = {},
         shellcheck = {},
         shellharden = {},
+        zls = {},
         --roslyn = {},
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -1015,6 +1016,7 @@ require('lazy').setup({
         'csv',
         'make',
         'cmake',
+        "zig",
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1137,4 +1139,3 @@ end
 
 require 'custom.custom_init'
 --require('chadrc')
-

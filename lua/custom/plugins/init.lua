@@ -337,11 +337,13 @@ return {
     -- end,
   },
 
-
   {
-  'stevearc/dressing.nvim',
-  opts = {},
-},
+    'aznhe21/actions-preview.nvim',
+  },
+  {
+    'stevearc/dressing.nvim',
+    opts = {},
+  },
 
   {
     'nvchad/ui',
