@@ -20,14 +20,14 @@ return {
   },
 
   -- Dap
-  {
-    'mfussenegger/nvim-dap',
-    config = function()
-      require 'custom.configs.dap'
-    end,
-  },
+  -- {
+  --   'mfussenegger/nvim-dap',
+  --   config = function()
+  --     require 'custom.configs.dap'
+  --   end,
+  -- },
 
-  { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' } },
+  -- { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' } },
   {
     'theHamsta/nvim-dap-virtual-text',
     config = function()

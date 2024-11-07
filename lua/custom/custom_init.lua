@@ -13,7 +13,7 @@ vim.g.OmniSharp_highlighting = 1
 vim.g.OmniSharp_server_use_net6 = 1
 vim.g.OmniSharp_selector_ui = 'fzf'
 
-vim.cmd 'language en_US'
+--vim.cmd 'language en_US'
 
 -- Indenting
 opt.expandtab = true

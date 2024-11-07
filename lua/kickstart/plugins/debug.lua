@@ -42,6 +42,8 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'codelldb',
+        'netcoredbg',
       },
     }
 
@@ -50,8 +52,8 @@ return {
     vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
     vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
     vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
-    vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
-    vim.keymap.set('n', '<leader>B', function()
+    vim.keymap.set('n', '<leader>lb', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
+    vim.keymap.set('n', '<leader>lB', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = 'Debug: Set Breakpoint' })
 
@@ -75,6 +77,36 @@ return {
           disconnect = '⏏',
         },
       },
+      layouts = { {
+        elements = { {
+            id = "scopes",
+            size = 0.25
+          }, {
+            id = "breakpoints",
+            size = 0.25
+          }, {
+            id = "stacks",
+            size = 0.25
+          }, {
+            id = "watches",
+            size = 0.25
+          } },
+        position = "left",
+        size = 40
+      }, {
+        elements = { 
+          {
+            id = "repl",
+            size = 0.5
+          }, 
+          {
+            id = "console",
+            size = 0.5
+          } 
+        },
+        position = "bottom",
+        size = 10
+      } },
     }
 
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
@@ -84,7 +116,15 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
+    -- debuggers
+      local lldb = require("custom.configs.dap.adapters.lldb")
+
+      dap.adapters.lldb = lldb.adapter
+
+      --dap.configurations.c = lldb.config
+      --dap.configurations.cpp = lldb.config
+
     -- Install golang specific config
-    require('dap-go').setup()
+    -- require('dap-go').setup()
   end,
 }
