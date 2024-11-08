@@ -10,6 +10,7 @@ return {
   -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
   -- NOTE: And you can specify dependencies as well
+  lazy = true,
   dependencies = {
     -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
@@ -41,7 +42,7 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        --'delve',
         'codelldb',
         'netcoredbg',
       },
@@ -77,36 +78,44 @@ return {
           disconnect = '⏏',
         },
       },
-      layouts = { {
-        elements = { {
-            id = "scopes",
-            size = 0.25
-          }, {
-            id = "breakpoints",
-            size = 0.25
-          }, {
-            id = "stacks",
-            size = 0.25
-          }, {
-            id = "watches",
-            size = 0.25
-          } },
-        position = "left",
-        size = 40
-      }, {
-        elements = { 
-          {
-            id = "repl",
-            size = 0.5
-          }, 
-          {
-            id = "console",
-            size = 0.5
-          } 
+      layouts = {
+        {
+          elements = {
+            {
+              id = 'scopes',
+              size = 0.25,
+            },
+            {
+              id = 'breakpoints',
+              size = 0.25,
+            },
+            {
+              id = 'stacks',
+              size = 0.25,
+            },
+            {
+              id = 'watches',
+              size = 0.25,
+            },
+          },
+          position = 'left',
+          size = 40,
         },
-        position = "bottom",
-        size = 10
-      } },
+        {
+          elements = {
+            {
+              id = 'repl',
+              size = 0.5,
+            },
+            {
+              id = 'console',
+              size = 0.5,
+            },
+          },
+          position = 'bottom',
+          size = 10,
+        },
+      },
     }
 
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
@@ -117,12 +126,12 @@ return {
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- debuggers
-      local lldb = require("custom.configs.dap.adapters.lldb")
+    local lldb = require 'custom.configs.dap.adapters.lldb'
 
-      dap.adapters.lldb = lldb.adapter
+    dap.adapters.lldb = lldb.adapter
 
-      --dap.configurations.c = lldb.config
-      --dap.configurations.cpp = lldb.config
+    --dap.configurations.c = lldb.config
+    --dap.configurations.cpp = lldb.config
 
     -- Install golang specific config
     -- require('dap-go').setup()

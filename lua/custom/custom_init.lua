@@ -159,10 +159,10 @@ vim.keymap.set('n', '<leader>lh', function()
 end, { desc = '[H]elp' })
 
 -- Telescope
-vim.keymap.set('n', '<leader>cd', require('telescope').extensions.zoxide.list, { desc = '[C]hange [D]irectory' })
+--vim.keymap.set('n', '<leader>cd', require('telescope').extensions.zoxide.list, { desc = '[C]hange [D]irectory' })
 --vim.keymap.set("n", "<leader>fs", function() require('telescope.builtin').grep_string() end, {desc = "[F]ind [S]tring"})
 -- vim.keymap.set("n", "<leader>fr", function() require('telescope.builtin').lsp_references() end, {desc = "[F]ind [R]eferences"})
-vim.keymap.set('n', '<leader>sa', require('telescope').extensions.aerial.aerial, { desc = '[S]earch [A]erial' })
+--vim.keymap.set('n', '<leader>sa', require('telescope').extensions.aerial.aerial, { desc = '[S]earch [A]erial' })
 
 vim.keymap.set('n', '<Leader>pf', 'i<C-r><C-o>+<ESC>l=`[`]$', { desc = 'Paste block and indent' })
 

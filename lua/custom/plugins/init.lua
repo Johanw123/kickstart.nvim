@@ -129,14 +129,17 @@ return {
 
   {
     'nvim-tree/nvim-web-devicons',
+    lazy = true,
     enabled = true,
   },
   {
     'nvim-tree/nvim-tree.lua',
+    lazy = true,
   },
 
   {
     'mechatroner/rainbow_csv',
+    lazy = true,
   },
 
   -- Dap
@@ -154,6 +157,7 @@ return {
       require('nvim-dap-virtual-text').setup()
     end,
     requires = { 'mfussenegger/nvim-dap' },
+    lazy = true,
   },
 
   {
@@ -211,6 +215,7 @@ return {
   },
   {
     'stevearc/oil.nvim',
+    -- lazy = true,
     opts = {},
     -- Optional dependencies
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -231,6 +236,7 @@ return {
   {
     'stevearc/aerial.nvim',
     lazy = true,
+    event = { 'BufReadPost', 'BufWritePost', 'BufNewFile' },
     opts = {},
     -- Optional dependencies
     dependencies = {
@@ -238,6 +244,7 @@ return {
       'nvim-tree/nvim-web-devicons',
     },
   },
+
   {
     'lewis6991/satellite.nvim',
   },
@@ -316,6 +323,7 @@ return {
 
   {
     'ThePrimeagen/harpoon',
+    lazy = true,
   },
   {
     'max397574/better-escape.nvim',
@@ -327,6 +335,7 @@ return {
 
   {
     'p00f/clangd_extensions.nvim',
+    lazy = true,
   },
   {
     'HiPhish/rainbow-delimiters.nvim',
@@ -377,6 +386,7 @@ return {
   -- },
   {
     'folke/flash.nvim',
+    lazy = true,
   },
   {
     'folke/trouble.nvim',
@@ -399,6 +409,7 @@ return {
 
   {
     'onsails/lspkind.nvim',
+    lazy = true,
   },
   {
     'ray-x/lsp_signature.nvim',
@@ -415,6 +426,7 @@ return {
 
   {
     'sindrets/diffview.nvim',
+    lazy = true,
   },
 
   -- {
@@ -446,6 +458,7 @@ return {
   -- },
   {
     'Johanw123/avalonia.nvim',
+    lazy = true,
     -- config = function()
     --   require('avalonia').setup {
     --     openUrlCommand = nil, -- start/open/xdg-open
@@ -459,6 +472,7 @@ return {
 
   {
     'aznhe21/actions-preview.nvim',
+    lazy = true,
   },
   {
     'stevearc/dressing.nvim',
@@ -481,6 +495,7 @@ return {
 
   {
     'MeanderingProgrammer/render-markdown.nvim',
+    lazy = true,
     opts = {},
     --dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins

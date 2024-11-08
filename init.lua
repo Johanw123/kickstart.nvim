@@ -324,7 +324,9 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
+    --event = 'VimEnter',
+    event = { 'BufReadPost', 'BufWritePost', 'BufNewFile' },
+    lazy = true,
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -405,6 +407,7 @@ require('lazy').setup({
       --pcall(require('telescope').load_extension, 'ui-select')
 
       pcall(require('telescope').load_extension, 'zoxide')
+      pcall(require('telescope').load_extension, 'aerial')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -418,6 +421,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+      vim.keymap.set('n', '<leader>cd', require('telescope').extensions.zoxide.list, { desc = '[C]hange [D]irectory' })
+      --vim.keymap.set("n", "<leader>fs", function() require('telescope.builtin').grep_string() end, {desc = "[F]ind [S]tring"})
+      -- vim.keymap.set("n", "<leader>fr", function() require('telescope.builtin').lsp_references() end, {desc = "[F]ind [R]eferences"})
+      vim.keymap.set('n', '<leader>sa', require('telescope').extensions.aerial.aerial, { desc = '[S]earch [A]erial' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -446,6 +454,7 @@ require('lazy').setup({
 
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    lazy = true,
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
@@ -996,6 +1005,7 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = true,
     build = ':TSUpdate',
     opts = {
       ensure_installed = {
