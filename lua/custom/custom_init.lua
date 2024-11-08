@@ -168,7 +168,7 @@ vim.keymap.set('n', '<Leader>pf', 'i<C-r><C-o>+<ESC>l=`[`]$', { desc = 'Paste bl
 
 -- Precognition
 -- vim.keymap.set('n', '<leader>p', 'lua require("precognition").peek()', { desc = 'Move focus to the upper window' })
-vim.keymap.set('n', '<leader>tp', '<cmd> lua require("precognition").toggle()<cr>', { desc = ' Toggle Precognition' })
+--vim.keymap.set('n', '<leader>tp', '<cmd> lua require("precognition").toggle()<cr>', { desc = ' Toggle Precognition' })
 
 -- Set keymap for <leader>tt to run !start powershell and cmd to the current working directory
 vim.keymap.set('n', '<leader>tt', function()
@@ -272,7 +272,7 @@ vim.keymap.set({ 'v', 'n' }, '<leader>ca', require('actions-preview').code_actio
 -- })
 
 -- set default off
-require('precognition').toggle()
+--require('precognition').toggle()
 
 require('diffview').setup {
   diff_binaries = false, -- Show diffs for binaries

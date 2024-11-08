@@ -8,6 +8,126 @@ return {
   --   dependencies = { 'nvim-tree/nvim-web-devicons' },
   -- },
   {
+    'folke/snacks.nvim',
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      bigfile = { enabled = true },
+      notifier = {
+        enabled = true,
+        timeout = 3000,
+      },
+      quickfile = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+      styles = {
+        notification = {
+          wo = { wrap = true }, -- Wrap notifications
+        },
+      },
+    },
+    keys = {
+      {
+        '<leader>un',
+        function()
+          Snacks.notifier.hide()
+        end,
+        desc = 'Dismiss All Notifications',
+      },
+      {
+        '<leader>bd',
+        function()
+          Snacks.bufdelete()
+        end,
+        desc = 'Delete Buffer',
+      },
+      {
+        '<leader>gg',
+        function()
+          Snacks.lazygit()
+        end,
+        desc = 'Lazygit',
+      },
+      {
+        '<leader>gb',
+        function()
+          Snacks.git.blame_line()
+        end,
+        desc = 'Git Blame Line',
+      },
+      {
+        '<leader>gB',
+        function()
+          Snacks.gitbrowse()
+        end,
+        desc = 'Git Browse',
+      },
+      {
+        '<leader>gf',
+        function()
+          Snacks.lazygit.log_file()
+        end,
+        desc = 'Lazygit Current File History',
+      },
+      {
+        '<leader>gl',
+        function()
+          Snacks.lazygit.log()
+        end,
+        desc = 'Lazygit Log (cwd)',
+      },
+      {
+        '<leader>cR',
+        function()
+          Snacks.rename()
+        end,
+        desc = 'Rename File',
+      },
+      {
+        ']]',
+        function()
+          Snacks.words.jump(vim.v.count1)
+        end,
+        desc = 'Next Reference',
+      },
+      {
+        '[[',
+        function()
+          Snacks.words.jump(-vim.v.count1)
+        end,
+        desc = 'Prev Reference',
+      },
+    },
+    init = function()
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'VeryLazy',
+        callback = function()
+          -- Setup some globals for debugging (lazy-loaded)
+          _G.dd = function(...)
+            Snacks.debug.inspect(...)
+          end
+          _G.bt = function()
+            Snacks.debug.backtrace()
+          end
+          vim.print = _G.dd -- Override print to use snacks for `:=` command
+
+          -- Create some toggle mappings
+          Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>ts'
+          Snacks.toggle.option('wrap', { name = 'Wrap' }):map '<leader>tw'
+          Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map '<leader>tL'
+          Snacks.toggle.diagnostics():map '<leader>td'
+          Snacks.toggle.line_number():map '<leader>tl'
+          Snacks.toggle.option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map '<leader>tc'
+          Snacks.toggle.treesitter():map '<leader>tT'
+          Snacks.toggle.option('background', { off = 'light', on = 'dark', name = 'Dark Background' }):map '<leader>tb'
+          --Snacks.toggle.inlay_hints():map '<leader>uh'
+        end,
+      })
+    end,
+  },
+
+  {
     'nvim-tree/nvim-web-devicons',
     enabled = true,
   },
@@ -297,33 +417,33 @@ return {
     'sindrets/diffview.nvim',
   },
 
-  {
-    'tris203/precognition.nvim',
-    --event = "VeryLazy",
-    config = {
-      -- startVisible = true,
-      -- showBlankVirtLine = true,
-      -- highlightColor = { link = "Comment" },
-      -- hints = {
-      --      Caret = { text = "^", prio = 2 },
-      --      Dollar = { text = "$", prio = 1 },
-      --      MatchingPair = { text = "%", prio = 5 },
-      --      Zero = { text = "0", prio = 1 },
-      --      w = { text = "w", prio = 10 },
-      --      b = { text = "b", prio = 9 },
-      --      e = { text = "e", prio = 8 },
-      --      W = { text = "W", prio = 7 },
-      --      B = { text = "B", prio = 6 },
-      --      E = { text = "E", prio = 5 },
-      -- },
-      -- gutterHints = {
-      --     G = { text = "G", prio = 10 },
-      --     gg = { text = "gg", prio = 9 },
-      --     PrevParagraph = { text = "{", prio = 8 },
-      --     NextParagraph = { text = "}", prio = 8 },
-      -- },
-    },
-  },
+  -- {
+  --   'tris203/precognition.nvim',
+  --   --event = "VeryLazy",
+  --   config = {
+  --     -- startVisible = true,
+  --     -- showBlankVirtLine = true,
+  --     -- highlightColor = { link = "Comment" },
+  --     -- hints = {
+  --     --      Caret = { text = "^", prio = 2 },
+  --     --      Dollar = { text = "$", prio = 1 },
+  --     --      MatchingPair = { text = "%", prio = 5 },
+  --     --      Zero = { text = "0", prio = 1 },
+  --     --      w = { text = "w", prio = 10 },
+  --     --      b = { text = "b", prio = 9 },
+  --     --      e = { text = "e", prio = 8 },
+  --     --      W = { text = "W", prio = 7 },
+  --     --      B = { text = "B", prio = 6 },
+  --     --      E = { text = "E", prio = 5 },
+  --     -- },
+  --     -- gutterHints = {
+  --     --     G = { text = "G", prio = 10 },
+  --     --     gg = { text = "gg", prio = 9 },
+  --     --     PrevParagraph = { text = "{", prio = 8 },
+  --     --     NextParagraph = { text = "}", prio = 8 },
+  --     -- },
+  --   },
+  -- },
   {
     'Johanw123/avalonia.nvim',
     -- config = function()
