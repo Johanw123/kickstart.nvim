@@ -454,6 +454,7 @@ require('lazy').setup({
 
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    event = { 'BufReadPost', 'BufWritePost', 'BufNewFile' },
     lazy = true,
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -636,7 +637,7 @@ require('lazy').setup({
         shellcheck = {},
         shellharden = {},
         zls = {},
-        --roslyn = {},
+        roslyn = {},
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -677,7 +678,13 @@ require('lazy').setup({
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
+      --require('mason').setup()
+      require('mason').setup {
+        registries = {
+          'github:mason-org/mason-registry',
+          'github:syndim/mason-registry',
+        },
+      }
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
