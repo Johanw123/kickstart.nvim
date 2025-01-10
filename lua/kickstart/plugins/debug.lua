@@ -11,6 +11,7 @@ return {
   'mfussenegger/nvim-dap',
   -- NOTE: And you can specify dependencies as well
   lazy = true,
+  event = { 'BufReadPost', 'BufWritePost', 'BufNewFile' },
   dependencies = {
     -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
