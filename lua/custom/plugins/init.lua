@@ -14,9 +14,19 @@ return {
     ---@type snacks.Config
     opts = {
       bigfile = { enabled = true },
-      notifier = {
-        enabled = true,
-        timeout = 3000,
+      -- notifier = {
+      --   enabled = true,
+      --   timeout = 3000,
+      -- },
+      --scroll = { enabled = true },
+      dashboard = {
+        sections = {
+          { section = 'header' },
+          { icon = ' ', title = 'Keymaps', section = 'keys', indent = 2, padding = 1 },
+          { icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, padding = 1 },
+          { icon = ' ', title = 'Projects', section = 'projects', indent = 2, padding = 1 },
+          { section = 'startup' },
+        },
       },
       quickfile = { enabled = true },
       statuscolumn = { enabled = true },
@@ -98,6 +108,114 @@ return {
           Snacks.words.jump(-vim.v.count1)
         end,
         desc = 'Prev Reference',
+      },
+
+      {
+        '<leader>sf',
+        function()
+          Snacks.picker.files()
+        end,
+        desc = 'Files',
+      },
+
+      {
+        '<leader>sg',
+        function()
+          Snacks.picker.grep()
+        end,
+        desc = 'Grep',
+      },
+
+      {
+        '<leader>sw',
+        function()
+          Snacks.picker.grep_word()
+        end,
+        desc = 'Word',
+        mode = { 'n', 'x' },
+      },
+
+      {
+        '<leader>sb',
+        function()
+          Snacks.picker.buffers()
+        end,
+        desc = 'Buffers',
+      },
+
+      {
+        '<leader>sg',
+        function()
+          Snacks.picker.git_files()
+        end,
+        desc = 'Git Files',
+      },
+
+      {
+        '<leader>sl',
+        function()
+          Snacks.picker.lines()
+        end,
+        desc = 'Lines',
+      },
+      {
+        '<leader><leader>',
+        function()
+          Snacks.picker.pick { finder = 'smart', finders = { 'buffers', 'recent', 'files' } }
+        end,
+      },
+
+      {
+        'gd',
+        function()
+          Snacks.picker.lsp_definitions()
+        end,
+        desc = 'Goto Definition',
+      },
+      {
+        'gr',
+        function()
+          Snacks.picker.lsp_references()
+        end,
+        nowait = true,
+        desc = 'References',
+      },
+      {
+        'gI',
+        function()
+          Snacks.picker.lsp_implementations()
+        end,
+        desc = 'Goto Implementation',
+      },
+      {
+        'gy',
+        function()
+          Snacks.picker.lsp_type_definitions()
+        end,
+        desc = 'Goto T[y]pe Definition',
+      },
+
+      {
+        '<leader>gs',
+        function()
+          Snacks.picker.git_status()
+        end,
+        desc = 'Git Status',
+      },
+      {
+        '<leader>:',
+        function()
+          Snacks.picker.command_history()
+        end,
+        desc = 'Command History',
+      },
+
+      {
+        '<leader>ss',
+        function()
+          Snacks.picker.lsp_symbols()
+        end,
+        desc = 'LSP Symbols',
       },
     },
     init = function()
@@ -391,17 +509,27 @@ return {
   },
   {
     'folke/trouble.nvim',
-    config = function()
-      return {
-        'folke/trouble.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        opts = {
-          -- your configuration comes here
-          -- or leave it empty to use the default settings
-          -- refer to the configuration section below
-        },
-      }
-    end,
+    optional = true,
+    specs = {
+      'folke/snacks.nvim',
+      opts = function(_, opts)
+        return vim.tbl_deep_extend('force', opts or {}, {
+          picker = {
+            actions = require('trouble.sources.snacks').actions,
+            win = {
+              input = {
+                keys = {
+                  ['<c-t>'] = {
+                    'trouble_open',
+                    mode = { 'n', 'i' },
+                  },
+                },
+              },
+            },
+          },
+        })
+      end,
+    },
   },
   {
     'github/copilot.vim',
@@ -503,44 +631,44 @@ return {
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
   },
 
-  {
-    'nvimdev/dashboard-nvim',
-    event = 'VimEnter',
-    config = function()
-      require('dashboard').setup {
-        theme = 'hyper',
-        config = {
-          week_header = {
-            enable = true,
-          },
-          shortcut = {
-            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
-            {
-              icon = ' ',
-              icon_hl = '@variable',
-              desc = 'Files',
-              group = 'Label',
-              action = 'Telescope find_files',
-              key = 'f',
-            },
-            {
-              desc = ' Apps',
-              group = 'DiagnosticHint',
-              action = 'Telescope app',
-              key = 'a',
-            },
-            {
-              desc = ' dotfiles',
-              group = 'Number',
-              action = 'Telescope dotfiles',
-              key = 'd',
-            },
-          },
-        },
-      }
-    end,
-    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
-  },
+  -- {
+  --   'nvimdev/dashboard-nvim',
+  --   event = 'VimEnter',
+  --   config = function()
+  --     require('dashboard').setup {
+  --       theme = 'hyper',
+  --       config = {
+  --         week_header = {
+  --           enable = true,
+  --         },
+  --         shortcut = {
+  --           { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+  --           {
+  --             icon = ' ',
+  --             icon_hl = '@variable',
+  --             desc = 'Files',
+  --             group = 'Label',
+  --             action = 'Telescope find_files',
+  --             key = 'f',
+  --           },
+  --           {
+  --             desc = ' Apps',
+  --             group = 'DiagnosticHint',
+  --             action = 'Telescope app',
+  --             key = 'a',
+  --           },
+  --           {
+  --             desc = ' dotfiles',
+  --             group = 'Number',
+  --             action = 'Telescope dotfiles',
+  --             key = 'd',
+  --           },
+  --         },
+  --       },
+  --     }
+  --   end,
+  --   dependencies = { { 'nvim-tree/nvim-web-devicons' } },
+  -- },
 
   { 'NvChad/nvim-colorizer.lua' },
 }
