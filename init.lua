@@ -682,7 +682,8 @@ require('lazy').setup({
       require('mason').setup {
         registries = {
           'github:mason-org/mason-registry',
-          'github:syndim/mason-registry',
+          -- 'github:syndim/mason-registry',
+          'github:Crashdummyy/mason-registry',
         },
       }
 
@@ -717,16 +718,16 @@ require('lazy').setup({
   { -- Autoformat
     'stevearc/conform.nvim',
     lazy = false,
-    -- keys = {
-    --   {
-    --     '<leader>f',
-    --     function()
-    --       require('conform').format { async = true, lsp_fallback = true }
-    --     end,
-    --     mode = '',
-    --     desc = '[F]ormat buffer',
-    --   },
-    --},
+    keys = {
+      {
+        '<leader>fb',
+        function()
+          require('conform').format { async = true, lsp_fallback = true }
+        end,
+        mode = '',
+        desc = '[F]ormat [B]uffer',
+      },
+    },
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)

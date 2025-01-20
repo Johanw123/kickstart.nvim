@@ -21,6 +21,7 @@ return {
       quickfile = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      picker = {},
       styles = {
         notification = {
           wo = { wrap = true }, -- Wrap notifications
@@ -195,7 +196,7 @@ return {
       },
       exe = {
         'dotnet',
-        vim.fs.joinpath(vim.fn.stdpath 'data', 'roslyn', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
+        vim.fs.joinpath(vim.fn.stdpath 'data', 'mason', 'packages', 'roslyn', 'libexec', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
       },
     },
   },
