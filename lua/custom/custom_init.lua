@@ -250,6 +250,47 @@ end, { desc = ' Diagnostics Next (Backwards)' })
 
 vim.keymap.set({ 'v', 'n' }, '<leader>ca', require('actions-preview').code_actions, { desc = 'Code Actions' })
 
+-- Git
+vim.keymap.set('n', '<leader>gp', function()
+  require('vgit').project_diff_preview()
+end, { desc = 'Project Diff Preview' })
+vim.keymap.set('n', '<leader>gx', function()
+  require('vgit').toggle_diff_preference()
+end, { desc = 'Toggle Diff Mode' })
+vim.keymap.set('n', '<leader>gu', function()
+  require('vgit').buffer_reset()
+end, { desc = 'Buffer Reset' })
+
+vim.keymap.set('n', '<leader>gs', function()
+  Snacks.picker.git_status()
+end, { desc = 'Git Status' })
+vim.keymap.set('n', '<leader>gg', function()
+  Snacks.lazygit()
+end, { desc = 'Lazygit' })
+vim.keymap.set('n', '<leader>go', function()
+  Snacks.gitbrowse()
+end, { desc = 'Git Open Browser' })
+
+vim.keymap.set('n', '<leader>gl', function()
+  Snacks.lazygit.log()
+end, { desc = 'Git Log' })
+vim.keymap.set('n', '<leader>gf', function()
+  Snacks.lazygit.log_file()
+end, { desc = 'Git Log File' })
+vim.keymap.set('n', '<leader>gb', function()
+  Snacks.git.blame_line()
+end, { desc = 'Git Blame Line' })
+
+vim.keymap.set('n', '<leader>gr', function()
+  require('vgit').buffer_blame_preview()
+end, { desc = 'Buffer Blame Preview' })
+vim.keymap.set('n', '<leader>gj', function()
+  require('vgit').buffer_diff_preview()
+end, { desc = 'Buffer Diff Preview' })
+vim.keymap.set('n', '<leader>gh', function()
+  require('vgit').buffer_history_preview()
+end, { desc = 'Buffer History Preview ' })
+
 -- keys = {
 --   {
 --     '<leader>f',
@@ -423,6 +464,12 @@ vim.api.nvim_set_hl(0, 'FlashLabel', { bg = '#82ccdd', fg = '#000000', standout 
 vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#82ccdd' })
 
 vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = '#82ccdd' })
+
+-- Diff / Git
+--
+vim.api.nvim_set_hl(0, 'DiffAdd', { bg = '#12261e' })
+vim.api.nvim_set_hl(0, 'DiffDelete', { bg = '#25171c' })
+
 -- vim.api.nvim_set_hl(0, 'DashboardHeader', { fg = '#82ccdd' })
 
 -- local map = require 'mini.map'

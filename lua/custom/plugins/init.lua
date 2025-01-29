@@ -53,41 +53,7 @@ return {
         end,
         desc = 'Delete Buffer',
       },
-      {
-        '<leader>gg',
-        function()
-          Snacks.lazygit()
-        end,
-        desc = 'Lazygit',
-      },
-      {
-        '<leader>gb',
-        function()
-          Snacks.git.blame_line()
-        end,
-        desc = 'Git Blame Line',
-      },
-      {
-        '<leader>gB',
-        function()
-          Snacks.gitbrowse()
-        end,
-        desc = 'Git Browse',
-      },
-      {
-        '<leader>gf',
-        function()
-          Snacks.lazygit.log_file()
-        end,
-        desc = 'Lazygit Current File History',
-      },
-      {
-        '<leader>gl',
-        function()
-          Snacks.lazygit.log()
-        end,
-        desc = 'Lazygit Log (cwd)',
-      },
+
       {
         '<leader>cR',
         function()
@@ -193,14 +159,6 @@ return {
           Snacks.picker.lsp_type_definitions()
         end,
         desc = 'Goto T[y]pe Definition',
-      },
-
-      {
-        '<leader>gs',
-        function()
-          Snacks.picker.git_status()
-        end,
-        desc = 'Git Status',
       },
       {
         '<leader>:',
@@ -682,34 +640,11 @@ return {
     event = 'VimEnter',
     config = function()
       require('vgit').setup {
-        keymaps = {
-          -- ['n <leader>gs'] = function()
-          --   require('vgit').buffer_hunk_stage()
-          -- end,
-          -- ['n <leader>gr'] = function()
-          --   require('vgit').buffer_hunk_reset()
-          -- end,
-          -- ['n <leader>gp'] = function()
-          --   require('vgit').buffer_hunk_preview()
-          -- end,
-          ['n <leader>gr'] = function()
-            require('vgit').buffer_blame_preview()
-          end,
-          ['n <leader>gj'] = function()
-            require('vgit').buffer_diff_preview()
-          end,
-          ['n <leader>gh'] = function()
-            require('vgit').buffer_history_preview()
-          end,
-          ['n <leader>gu'] = function()
-            require('vgit').buffer_reset()
-          end,
-          ['n <leader>gp'] = function()
-            require('vgit').project_diff_preview()
-          end,
-          ['n <leader>gx'] = function()
-            require('vgit').toggle_diff_preference()
-          end,
+        settings = {
+          hls = {
+            -- GitSignsAdd = { fg = '#00ff00', bg = '#FF0000' },
+            -- GitSignsAddLn = { bg = '#12261e' },
+          },
         },
       }
     end,
