@@ -271,9 +271,13 @@ vim.keymap.set('n', '<leader>go', function()
   Snacks.gitbrowse()
 end, { desc = 'Git Open Browser' })
 
+-- vim.keymap.set('n', '<leader>gl', function()
+--   require('vgit').project_logs_preview()
+-- end, { desc = 'Git Log' })
+
 vim.keymap.set('n', '<leader>gl', function()
   Snacks.lazygit.log()
-end, { desc = 'Git Log' })
+end, { desc = 'git log' })
 vim.keymap.set('n', '<leader>gf', function()
   Snacks.lazygit.log_file()
 end, { desc = 'Git Log File' })
@@ -463,12 +467,29 @@ vim.api.nvim_set_hl(0, 'FlashLabel', { bg = '#82ccdd', fg = '#000000', standout 
 
 vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#82ccdd' })
 
-vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = '#82ccdd' })
+vim.api.nvim_set_hl(0, 'TelescopepromptBorder', { fg = '#82ccdd' })
 
 -- Diff / Git
 --
 vim.api.nvim_set_hl(0, 'DiffAdd', { bg = '#12261e' })
 vim.api.nvim_set_hl(0, 'DiffDelete', { bg = '#25171c' })
+vim.api.nvim_set_hl(0, 'DiffChange', { bg = '#0d181f' })
+vim.api.nvim_set_hl(0, 'DiffText', { bg = '#23384c' })
+--vim.api.nvim_set_hl(0, 'diffChanged', { bg = '#7AA6DA' })
+
+vim.api.nvim_set_hl(0, 'DiffWordAdd', { bg = '#1d572d' })
+vim.api.nvim_set_hl(0, 'DiffWordDelete', { bg = '#792e2e' })
+
+vim.api.nvim_set_hl(0, 'GitSignsAddLn', { bg = '#12261e' })
+vim.api.nvim_set_hl(0, 'GitSignsDeleteLn', { bg = '#25171c' })
+--vim.api.nvim_set_hl(0, 'GitSignsChange', { bg = '#7AA6DA' })
+--
+--https://www.reddit.com/r/neovim/comments/158zdir/favorite_git_mergetool/
+--
+--#region
+
+--diffChanged
+--DiffChange
 
 -- vim.api.nvim_set_hl(0, 'DashboardHeader', { fg = '#82ccdd' })
 

@@ -513,7 +513,7 @@ return {
 
   {
     'sindrets/diffview.nvim',
-    lazy = true,
+    lazy = false,
   },
 
   -- {
@@ -641,9 +641,8 @@ return {
     config = function()
       require('vgit').setup {
         settings = {
-          hls = {
-            -- GitSignsAdd = { fg = '#00ff00', bg = '#FF0000' },
-            -- GitSignsAddLn = { bg = '#12261e' },
+          scene = {
+            diff_preference = 'split',
           },
         },
       }
