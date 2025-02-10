@@ -2,6 +2,16 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
+--
+--
+local function ternary(cond, T, F)
+  if cond then
+    return T
+  else
+    return F
+  end
+end
+
 return {
   -- {
   --   'nvim-lualine/lualine.nvim',
@@ -31,6 +41,7 @@ return {
       quickfile = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      explorer = { enabled = true },
       picker = {},
       styles = {
         notification = {
@@ -39,6 +50,12 @@ return {
       },
     },
     keys = {
+      {
+        '<C-n>',
+        function()
+          Snacks.picker.explorer()
+        end,
+      },
       {
         '<leader>un',
         function()
@@ -209,9 +226,15 @@ return {
         end,
         desc = 'Command History',
       },
-
       {
         '<leader>ss',
+        function()
+          Snacks.picker.smart()
+        end,
+        desc = 'Smart',
+      },
+      {
+        '<leader>sp',
         function()
           Snacks.picker.lsp_symbols()
         end,
@@ -314,6 +337,7 @@ return {
       },
       exe = {
         'dotnet',
+
         vim.fs.joinpath(vim.fn.stdpath 'data', 'mason', 'packages', 'roslyn', 'libexec', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
       },
     },

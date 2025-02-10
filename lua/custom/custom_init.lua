@@ -14,6 +14,9 @@ vim.g.OmniSharp_server_use_net6 = 1
 vim.g.OmniSharp_selector_ui = 'fzf'
 
 --vim.cmd 'language en_US'
+--
+vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
+--vim.opt.diffopt = 'internal,filler,closeoff'
 
 -- Indenting
 opt.expandtab = true
@@ -137,6 +140,8 @@ vim.keymap.set('n', '<leader>3', "<Cmd>lua require('harpoon.ui').nav_file(3)<CR>
 vim.keymap.set('n', '<leader>4', "<Cmd>lua require('harpoon.ui').nav_file(4)<CR>", { desc = 'Harpoon to file 4' })
 vim.keymap.set('n', '<leader>5', "<Cmd>lua require('harpoon.ui').nav_file(5)<CR>", { desc = 'Harpoon to file 5' })
 
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+
 -- Flash
 vim.keymap.set('n', '<leader>fj', function()
   require('flash').jump()
@@ -249,6 +254,10 @@ vim.keymap.set('n', '<leader>dN', function()
 end, { desc = ' Diagnostics Next (Backwards)' })
 
 vim.keymap.set({ 'v', 'n' }, '<leader>ca', require('actions-preview').code_actions, { desc = 'Code Actions' })
+
+vim.keymap.set('n', '<leader>do', '<Cmd>DiffviewOpen<CR>', { desc = ' Diffview Open' })
+vim.keymap.set('n', '<leader>dc', '<Cmd>DiffviewClose<CR>', { desc = ' Diffview Close' })
+vim.keymap.set('n', '<leader>dt', '<Cmd>DiffviewToggleFiles<CR>', { desc = ' Diffview Toggle Files' })
 
 -- keys = {
 --   {
