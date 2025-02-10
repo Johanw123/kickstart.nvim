@@ -70,41 +70,7 @@ return {
         end,
         desc = 'Delete Buffer',
       },
-      {
-        '<leader>gg',
-        function()
-          Snacks.lazygit()
-        end,
-        desc = 'Lazygit',
-      },
-      {
-        '<leader>gb',
-        function()
-          Snacks.git.blame_line()
-        end,
-        desc = 'Git Blame Line',
-      },
-      {
-        '<leader>gB',
-        function()
-          Snacks.gitbrowse()
-        end,
-        desc = 'Git Browse',
-      },
-      {
-        '<leader>gf',
-        function()
-          Snacks.lazygit.log_file()
-        end,
-        desc = 'Lazygit Current File History',
-      },
-      {
-        '<leader>gl',
-        function()
-          Snacks.lazygit.log()
-        end,
-        desc = 'Lazygit Log (cwd)',
-      },
+
       {
         '<leader>cR',
         function()
@@ -210,14 +176,6 @@ return {
           Snacks.picker.lsp_type_definitions()
         end,
         desc = 'Goto T[y]pe Definition',
-      },
-
-      {
-        '<leader>gs',
-        function()
-          Snacks.picker.git_status()
-        end,
-        desc = 'Git Status',
       },
       {
         '<leader>:',
@@ -579,7 +537,7 @@ return {
 
   {
     'sindrets/diffview.nvim',
-    lazy = true,
+    lazy = false,
   },
 
   -- {
@@ -695,4 +653,23 @@ return {
   -- },
 
   { 'NvChad/nvim-colorizer.lua' },
+
+  -- https://www.reddit.com/r/neovim/comments/10nfhqa/is_there_a_way_to_show_side_by_side_diffs_when/
+  {
+    'tanvirtin/vgit.nvim',
+    branch = 'v1.0.x',
+    -- or               , tag = 'v1.0.2',
+    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons' },
+    -- Lazy loading on 'VimEnter' event is necessary.
+    event = 'VimEnter',
+    config = function()
+      require('vgit').setup {
+        settings = {
+          scene = {
+            diff_preference = 'split',
+          },
+        },
+      }
+    end,
+  },
 }
