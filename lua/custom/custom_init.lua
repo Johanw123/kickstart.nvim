@@ -51,8 +51,6 @@ if vim.fn.has 'wsl' == 1 then
   package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/?.lua;'
   package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/magick/init.lua;'
 
-  -- vim.opt.shell = "kitty"
-  -- vim.opt.shellcmdflag = "--detach"
   vim.opt.shell = 'zsh'
 elseif vim.fn.has 'win32' == 1 and vim.fn.has 'wsl' == 0 then
   local powershell_options = {
