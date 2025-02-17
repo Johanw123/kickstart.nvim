@@ -12,9 +12,10 @@ opt.fillchars = { eob = ' ' }
 vim.g.OmniSharp_highlighting = 1
 vim.g.OmniSharp_server_use_net6 = 1
 vim.g.OmniSharp_selector_ui = 'fzf'
-vim.cmd 'language en_US'
---vim.cmd 'language en_US'
---
+
+if vim.fn.has 'win32' == 1 then
+  vim.cmd 'language en_US'
+end
 --
 vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
 --vim.opt.diffopt = 'internal,filler,closeoff'
