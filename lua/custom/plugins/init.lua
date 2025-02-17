@@ -126,13 +126,13 @@ return {
         desc = 'Buffers',
       },
 
-      {
-        '<leader>sg',
-        function()
-          Snacks.picker.git_files()
-        end,
-        desc = 'Git Files',
-      },
+      -- {
+      --   '<leader>sg',
+      --   function()
+      --     Snacks.picker.git_files()
+      --   end,
+      --   desc = 'Git Files',
+      -- },
 
       {
         '<leader>sl',
