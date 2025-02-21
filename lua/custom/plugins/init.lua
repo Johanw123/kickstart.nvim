@@ -29,7 +29,7 @@ return {
       --   timeout = 3000,
       -- },
       --scroll = { enabled = true },
-      image = { enabled = true },
+      image = { enabled = true, force = true },
       dashboard = {
         sections = {
           { section = 'header' },
