@@ -50,12 +50,14 @@ if vim.g.neovide then
   vim.g.neovide_cursor_animation_length = 0
 end
 
+vim.opt.shell = 'fish'
+
 if vim.fn.has 'wsl' == 1 then
   package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/?/init.lua;'
   package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/?.lua;'
   package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/magick/init.lua;'
 
-  vim.opt.shell = 'zsh'
+  vim.opt.shell = 'fish'
 elseif vim.fn.has 'win32' == 1 and vim.fn.has 'wsl' == 0 then
   local powershell_options = {
     shell = vim.fn.executable 'pwsh' == 1 and 'pwsh' or 'powershell',
