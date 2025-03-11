@@ -13,6 +13,8 @@ vim.g.OmniSharp_highlighting = 1
 vim.g.OmniSharp_server_use_net6 = 1
 vim.g.OmniSharp_selector_ui = 'fzf'
 
+vim.treesitter.language.register('glsl', { 'frag', 'vert' })
+
 if vim.fn.has 'win32' == 1 then
   vim.cmd 'language en_US'
 end
@@ -191,7 +193,7 @@ end, { noremap = true, silent = true, desc = 'Start powershell' })
 
 vim.keymap.set('n', '<leader>o', function()
   local path = vim.fn.fnamemodify(vim.fn.expand '%:h', ':p')
-  vim.fn.system { 'cmd', '/c', 'explorer', path }
+  vim.fn.system { 'cmd', '/c', 'start', path, '\\explorer.exe' }
 end, { desc = 'Explore file location' })
 
 vim.keymap.set({ 'n', 't' }, '<A-i>', function()

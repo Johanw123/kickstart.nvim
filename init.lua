@@ -638,6 +638,7 @@ require('lazy').setup({
         shellharden = {},
         zls = {},
         roslyn = {},
+        --glsl_analyzer = {},
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -692,6 +693,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'glsl_analyzer',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -711,6 +713,12 @@ require('lazy').setup({
             require('lspconfig')[server_name].setup(server)
           end,
         },
+      }
+
+      require('lspconfig').glsl_analyzer.setup {
+        on_attach = function(client, buffer) end,
+        capabilities = capabilities,
+        filetypes = { 'vert', 'frag', 'glsl' },
       }
     end,
   },
