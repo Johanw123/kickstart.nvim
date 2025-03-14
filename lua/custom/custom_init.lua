@@ -41,7 +41,7 @@ if vim.g.neovide then
   --vim.g.neovide_background_color = "#332C2A" .. alpha()
   --vim.g.neovide_background_color = "#332C2A"
 
-  vim.o.guifont = 'FiraCode NF'
+  vim.o.guifont = 'FiraCode Nerd Font'
 
   vim.g.neovide_floating_blur_amount_x = 2
   vim.g.neovide_floating_blur_amount_y = 2
