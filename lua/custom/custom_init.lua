@@ -50,7 +50,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.lsp.enable { 'clangd', 'powershell_es', 'lua_ls' }
+--https://www.reddit.com/r/neovim/comments/1jkfpqg/are_there_still_benefits_for_using_lspconfig_in/
+vim.lsp.enable { 'clangd', 'powershell_es', 'luals', 'glsl_analyzer' }
 
 if vim.g.neovide then
   --vim.g.neovide_transparency = 0.9

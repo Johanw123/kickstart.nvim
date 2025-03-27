@@ -1,12 +1,18 @@
---
---
---
---
--- return {
---   default_config = {
---     cmd = { 'lua-language-server' },
---     filetypes = { 'lua' },
---     --root_dir = util.root_pattern(root_files),
---     single_file_support = true,
---     log_level = vim.lsp.protocol.MessageType.Warning,
---   },
+-- luals.lua
+return {
+  cmd = { "lua-language-server" },
+  filetypes = { "lua" },
+  root_markers = { ".luarc.json", ".luarc.jsonc" },
+  telemetry = { enabled = false },
+  formatters = {
+    ignoreComments = false,
+  },
+  settings = {
+    Lua = {
+      runtime = {
+        version = "LuaJIT",
+      },
+      signatureHelp = { enabled = true },
+    },
+  },
+}
