@@ -1,0 +1,12 @@
+--
+--
+--
+--
+-- return {
+--   default_config = {
+--     cmd = { 'lua-language-server' },
+--     filetypes = { 'lua' },
+--     --root_dir = util.root_pattern(root_files),
+--     single_file_support = true,
+--     log_level = vim.lsp.protocol.MessageType.Warning,
+--   },

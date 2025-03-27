@@ -20,7 +20,6 @@ if vim.fn.has 'win32' == 1 then
 end
 --
 vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
---vim.opt.diffopt = 'internal,filler,closeoff'
 
 -- Indenting
 opt.expandtab = true
@@ -31,9 +30,27 @@ opt.softtabstop = 2
 
 opt.linespace = 5
 
+--vim.o.winborder = 'rounded'
+
 vim.g.mapleader = ' '
 
+-- vim.diagnostic.config { virtual_text = true, virtual_lines = true }
+vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+
 -- vim.g.indenltine_filetype_exclude = { 'help', 'dashboard', 'packer' }
+--
+--
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client:supports_method 'textDocument/completion' then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
+})
+
+vim.lsp.enable { 'clangd', 'powershell_es', 'lua_ls' }
 
 if vim.g.neovide then
   --vim.g.neovide_transparency = 0.9
