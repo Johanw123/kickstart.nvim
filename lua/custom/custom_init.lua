@@ -37,18 +37,179 @@ vim.g.mapleader = ' '
 -- vim.diagnostic.config { virtual_text = true, virtual_lines = true }
 vim.diagnostic.config { virtual_text = true, virtual_lines = false }
 
+---[[AUTOCOMPLETION SETUP
+vim.o.completeopt = "menu,noinsert,popup,fuzzy,preview"
+
 -- vim.g.indenltine_filetype_exclude = { 'help', 'dashboard', 'packer' }
 --
 --
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(ev)
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if client:supports_method 'textDocument/completion' then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-    end
-  end,
-})
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+        callback = function(event)
+          -- NOTE: Remember that Lua is a real programming language, and as such it is possible
+          -- to define small helper and utility functions so you don't have to repeat yourself.
+          --
+          -- In this case, we create a function that lets us more easily define mappings specific
+          -- for LSP related items. It sets the mode, buffer and description for us each time.
+          local map = function(keys, func, desc)
+            vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+          end
+  
+          -- -- Jump to the definition of the word under your cursor.
+          -- --  This is where a variable was first declared, or where a function is defined, etc.
+          -- --  To jump back, press <C-t>.
+          -- map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          --
+          -- -- Find references for the word under your cursor.
+          -- map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          --
+          -- -- Jump to the implementation of the word under your cursor.
+          -- --  Useful when your language has ways of declaring types without an actual implementation.
+          -- map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          --
+          -- -- Jump to the type of the word under your cursor.
+          -- --  Useful when you're not sure what type a variable is and you want to see
+          -- --  the definition of its *type*, not where it was *defined*.
+          -- map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+          --
+          -- -- Fuzzy find all the symbols in your current document.
+          -- --  Symbols are things like variables, functions, types, etc.
+          -- map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          --
+          -- -- Fuzzy find all the symbols in your current workspace.
+          -- --  Similar to document symbols, except searches over your entire project.
+          -- map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  
+          -- Rename the variable under your cursor.
+          --  Most Language Servers support renaming across files, etc.
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+  
+          -- Execute a code action, usually your cursor needs to be on top of an error
+          -- or a suggestion from your LSP for this to activate.
+          -- map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+  
+          -- Opens a popup that displays documentation about the word under your cursor
+          --  See `:help K` for why this keymap.
+          map('K', vim.lsp.buf.hover, 'Hover Documentation')
+  
+          -- WARN: This is not Goto Definition, this is Goto Declaration.
+          --  For example, in C this would take you to the header.
+          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  
+          -- The following two autocommands are used to highlight references of the
+          -- word under your cursor when your cursor rests there for a little while.
+          --    See `:help CursorHold` for information about when this is executed
+          --
+          -- When you move your cursor, the highlights will be cleared (the second autocommand).
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities.documentHighlightProvider then
+            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = event.buf,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.document_highlight,
+            })
+  
+            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+              buffer = event.buf,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.clear_references,
+            })
+          end
+  
+          -- The following autocommand is used to enable inlay hints in your
+          -- code, if the language server you are using supports them
+          --
+          -- This may be unwanted, since they displace some of your code
+  
+          if client.name == 'clangd' then
+            require('clangd_extensions').setup()
+            -- require('clangd_extensions.inlay_hints').setup_autocmd()
+            -- require('clangd_extensions.inlay_hints').set_inlay_hints()
+  
+            map('<leader>th', function()
+              require('clangd_extensions.inlay_hints').toggle_inlay_hints()
+            end, '[T]oggle Hints')
+          else
+            if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+              map('<leader>th', function()
+                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+              end, '[T]oggle Hints')
+            end
+          end
+  
+          -- vim.keymap.set('n', '<leader>lt',
+          --   function()
+          --     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          --       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+          --     end
+          --   end, { desc = '[T]oggle Hints' })
+        end,
+      })
+
+            vim.api.nvim_create_autocmd('LspDetach', {
+        group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+        callback = function(event)
+          vim.lsp.buf.clear_references()
+          vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event.buf }
+        end,
+      })
+
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   callback = function(ev)
+--     local client = vim.lsp.get_client_by_id(ev.data.client_id)
+--     if client:supports_method 'textDocument/completion' then
+--       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+--     end
+--   end,
+-- })
+
+
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   callback = function(args)
+--     ---[[Code required to activate autocompletion and trigger it on each keypress
+--     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+--     --client.server_capabilities.completionProvider.triggerCharacters = vim.split("qwertyuiopasdfghjklzxcvbnm. ", "")
+--     vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
+--       buffer = args.buf,
+--       callback = function()
+--         vim.lsp.completion.get()
+--       end
+--     })
+--     vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+--     ---]]
+
+--     ---[[Code required to add documentation popup for an item
+--     local _, cancel_prev = nil, function() end
+--     vim.api.nvim_create_autocmd('CompleteChanged', {
+--       buffer = args.buf,
+--       callback = function()
+--         cancel_prev()
+--         local info = vim.fn.complete_info({ 'selected' })
+--         local completionItem = vim.tbl_get(vim.v.completed_item, 'user_data', 'nvim', 'lsp', 'completion_item')
+--         if nil == completionItem then
+--           return
+--         end
+--         _, cancel_prev = vim.lsp.buf_request(args.buf,
+--           vim.lsp.protocol.Methods.completionItem_resolve,
+--           completionItem,
+--           function(err, item, ctx)
+--             if not item then
+--               return
+--             end
+--             local docs = (item.documentation or {}).value
+--             local win = vim.api.nvim__complete_set(info['selected'], { info = docs })
+--             if win.winid and vim.api.nvim_win_is_valid(win.winid) then
+--               vim.treesitter.start(win.bufnr, 'markdown')
+--               vim.wo[win.winid].conceallevel = 3
+--             end
+--           end)
+--       end
+--     })
+--     ---]]
+--   end
+-- })
 
 --https://www.reddit.com/r/neovim/comments/1jkfpqg/are_there_still_benefits_for_using_lspconfig_in/
 vim.lsp.enable { 'clangd', 'powershell_es', 'luals', 'glsl_analyzer' }
@@ -147,206 +308,6 @@ require('ibl').setup {
   },
 }
 
-vim.keymap.set('n', 'go', '<Cmd>ClangdSwitchSourceHeader<CR>', { desc = 'Switch header/source (C++)' })
-
--- Harpoon
-vim.keymap.set('n', '<leader>ha', "<Cmd>lua require('harpoon.mark').add_file()<CR>", { desc = 'Add file' })
-vim.keymap.set('n', '<leader>hr', "<Cmd>lua require('harpoon.mark').rm_file()<CR>", { desc = 'Remove file' })
-vim.keymap.set('n', '<leader>hl', "<Cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>", { desc = 'Toggle quick menu' })
-vim.keymap.set('n', '<leader>hn', "<Cmd>lua require('harpoon.ui').nav_next()<CR>", { desc = 'Navigate next file' })
-vim.keymap.set('n', '<leader>hp', "<Cmd>lua require('harpoon.ui').nav_prev()<CR>", { desc = 'Navigate previous file' })
-
-vim.keymap.set('n', '<leader>1', "<Cmd>lua require('harpoon.ui').nav_file(1)<CR>", { desc = 'Harpoon to file 1' })
-vim.keymap.set('n', '<leader>2', "<Cmd>lua require('harpoon.ui').nav_file(2)<CR>", { desc = 'Harpoon to file 2' })
-vim.keymap.set('n', '<leader>3', "<Cmd>lua require('harpoon.ui').nav_file(3)<CR>", { desc = 'Harpoon to file 3' })
-vim.keymap.set('n', '<leader>4', "<Cmd>lua require('harpoon.ui').nav_file(4)<CR>", { desc = 'Harpoon to file 4' })
-vim.keymap.set('n', '<leader>5', "<Cmd>lua require('harpoon.ui').nav_file(5)<CR>", { desc = 'Harpoon to file 5' })
-
-vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-
--- Flash
-vim.keymap.set('n', '<leader>fj', function()
-  require('flash').jump()
-end, { desc = 'Flash [J]ump' })
-vim.keymap.set('n', '<leader>ft', function()
-  require('flash').treesitter()
-end, { desc = 'Flash Treesitter' })
-vim.keymap.set('n', '<leader>fr', function()
-  require('flash').treesitter_search()
-end, { desc = 'Flash Treesitter Search' })
-
--- Buffer
-vim.keymap.set('n', '<leader>bf', function()
-  require('conform').format { async = true, lsp_fallback = true }
-end, { desc = '[F]ormat buffer' })
-
--- LSP
-vim.keymap.set('n', '<leader>lh', function()
-  vim.lsp.buf.signature_help()
-end, { desc = '[H]elp' })
-
--- Telescope
---vim.keymap.set('n', '<leader>cd', require('telescope').extensions.zoxide.list, { desc = '[C]hange [D]irectory' })
---vim.keymap.set("n", "<leader>fs", function() require('telescope.builtin').grep_string() end, {desc = "[F]ind [S]tring"})
--- vim.keymap.set("n", "<leader>fr", function() require('telescope.builtin').lsp_references() end, {desc = "[F]ind [R]eferences"})
---vim.keymap.set('n', '<leader>sa', require('telescope').extensions.aerial.aerial, { desc = '[S]earch [A]erial' })
-
-vim.keymap.set('n', '<Leader>pf', 'i<C-r><C-o>+<ESC>l=`[`]$', { desc = 'Paste block and indent' })
-
--- Precognition
--- vim.keymap.set('n', '<leader>p', 'lua require("precognition").peek()', { desc = 'Move focus to the upper window' })
---vim.keymap.set('n', '<leader>tp', '<cmd> lua require("precognition").toggle()<cr>', { desc = ' Toggle Precognition' })
-
--- Set keymap for <leader>tt to run !start powershell and cmd to the current working directory
-vim.keymap.set('n', '<leader>tt', function()
-  -- get cwd and run cmd
-  local cwd = vim.fn.getcwd()
-  vim.fn.system { 'cmd', '/c', 'start', 'pwsh', '-NoExit' }
-end, { noremap = true, silent = true, desc = 'Start powershell' })
-
--- vim.keymap.set('n', '<leader>lt',
---   function()
---     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
---       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
---     end
---   end, { desc = '[T]oggle Hints' })
-
-vim.keymap.set('n', '<leader>o', function()
-  local path = vim.fn.fnamemodify(vim.fn.expand '%:h', ':p')
-  vim.fn.system { 'cmd', '/c', 'start', path, '\\explorer.exe' }
-end, { desc = 'Explore file location' })
-
-vim.keymap.set({ 'n', 't' }, '<A-i>', function()
-  require('nvchad.term').toggle { pos = 'float', id = 'floatTerm' }
-end)
-
-vim.keymap.set({ 'n', 't' }, '<A-h>', function()
-  require('nvchad.term').toggle { pos = 'sp', id = 'horizontalSplitTerm', size = 0.4 }
-end)
-
-vim.keymap.set({ 'n', 't' }, '<A-v>', function()
-  require('nvchad.term').toggle { pos = 'vsp', id = 'verticalSplitTerm', size = 0.4 }
-end)
--- require('which-key').register {
---   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
---   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
---   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
---   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
---   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
---   ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
---   ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
--- }
-
-require('which-key').add {
-  { '<leader>b', group = '[B]uffer' },
-  { '<leader>b_', hidden = true },
-  { '<leader>f', group = '[F]lash' },
-  { '<leader>f_', hidden = true },
-  { '<leader>h', group = '[H]arpoon' },
-  { '<leader>h_', hidden = true },
-  { '<leader>l', group = '[L]sp' },
-  { '<leader>l_', hidden = true },
-}
-
-vim.keymap.set('n', '<leader>ta', '<cmd>AerialToggle!<CR>', { desc = ' Toggle Aerial' })
-vim.keymap.set('n', '<leader>tm', function()
-  require('mini.map').toggle()
-end, { desc = ' Toggle MiniMap' })
-
-vim.keymap.set('n', '<leader>th', function()
-  if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-  end
-end, { desc = '[T]oggle [H]ints' })
-
-vim.keymap.set('n', '<leader>dn', function()
-  vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR, wrap = true }
-end, { desc = ' Diagnostics Next' })
-
-vim.keymap.set('n', ']e', function()
-  vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR, wrap = true }
-end, { desc = ' Diagnostics Next' })
-
-vim.keymap.set('n', '[e', function()
-  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR, wrap = true }
-end, { desc = ' Diagnostics Next' })
-
-vim.keymap.set('n', '<leader>dN', function()
-  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR, wrap = true }
-end, { desc = ' Diagnostics Next (Backwards)' })
-
-vim.keymap.set({ 'v', 'n' }, '<leader>ca', require('actions-preview').code_actions, { desc = 'Code Actions' })
-
-vim.keymap.set('n', '<leader>do', '<Cmd>DiffviewOpen<CR>', { desc = ' Diffview Open' })
-vim.keymap.set('n', '<leader>dc', '<Cmd>DiffviewClose<CR>', { desc = ' Diffview Close' })
-vim.keymap.set('n', '<leader>dt', '<Cmd>DiffviewToggleFiles<CR>', { desc = ' Diffview Toggle Files' })
-
--- Git
-vim.keymap.set('n', '<leader>gp', function()
-  require('vgit').project_diff_preview()
-end, { desc = 'Project Diff Preview' })
-vim.keymap.set('n', '<leader>gx', function()
-  require('vgit').toggle_diff_preference()
-end, { desc = 'Toggle Diff Mode' })
-vim.keymap.set('n', '<leader>gu', function()
-  require('vgit').buffer_reset()
-end, { desc = 'Buffer Reset' })
-
-vim.keymap.set('n', '<leader>gs', function()
-  Snacks.picker.git_status()
-end, { desc = 'Git Status' })
-vim.keymap.set('n', '<leader>gg', function()
-  Snacks.lazygit()
-end, { desc = 'Lazygit' })
-vim.keymap.set('n', '<leader>go', function()
-  Snacks.gitbrowse()
-end, { desc = 'Git Open Browser' })
-
--- vim.keymap.set('n', '<leader>gl', function()
---   require('vgit').project_logs_preview()
--- end, { desc = 'Git Log' })
-
-vim.keymap.set('n', '<leader>gl', function()
-  Snacks.lazygit.log()
-end, { desc = 'git log' })
-vim.keymap.set('n', '<leader>gf', function()
-  Snacks.lazygit.log_file()
-end, { desc = 'Git Log File' })
-vim.keymap.set('n', '<leader>gb', function()
-  Snacks.git.blame_line()
-end, { desc = 'Git Blame Line' })
-
-vim.keymap.set('n', '<leader>gr', function()
-  require('vgit').buffer_blame_preview()
-end, { desc = 'Buffer Blame Preview' })
-vim.keymap.set('n', '<leader>gj', function()
-  require('vgit').buffer_diff_preview()
-end, { desc = 'Buffer Diff Preview' })
-vim.keymap.set('n', '<leader>gh', function()
-  require('vgit').buffer_history_preview()
-end, { desc = 'Buffer History Preview ' })
-
--- keys = {
---   {
---     '<leader>f',
---     function() require('conform').format { async = true, lsp_fallback = true } end,
---     mode = '',
---     desc = '[F]ormat buffer',
---   },
-
--- local data_path = vim.fn.stdpath("data")
--- vim.print(data_path)
--- require("roslyn").setup({
---   --on_attach = function(client, buffer)
---   --  on_attach(client, buffer)
-
---   --end,
---   capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities),
---   handlers = {
---     ["textdocument/definition"] = require('omnisharp_extended').handler,
---   }
--- })
-
 -- set default off
 --require('precognition').toggle()
 
@@ -376,160 +337,28 @@ require('diffview').setup {
   },
 }
 
-local hl = vim.api.nvim_set_hl
 
-vim.g.OmniSharp_highlight_groups = {
-  PropertyName = 'PropertyName',
-  TypeParameterName = 'TypeParameterName',
-  Structure = 'Structure',
-  StaticSymbol = 'PropertyName',
-  ParameterName = 'ParameterName',
-  FieldName = 'FieldName',
-  ClassName = 'ClassName',
-  LocalName = 'LocalName',
+require('mason').setup {
+      registries = {
+        'github:mason-org/mason-registry',
+        -- 'github:syndim/mason-registry',
+        'github:Crashdummyy/mason-registry',
+      },
+    }
+
+local ensure_installed = {
+        clangd = {},
+        cpptools = {},
+        pyright = {},
+        rust_analyzer = {},
+        powershell_es = {},
+        shellcheck = {},
+        shellharden = {},
+        zls = {},
+        roslyn = {},
+        glsl_analyzer = {},
 }
+require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-local links = {
-  ['@lsp.type.namespace'] = '@namespace',
-  ['@lsp.type.type'] = '@type',
-  ['@lsp.type.class'] = '@type',
-  ['@lsp.type.enum'] = '@type',
-  ['@lsp.type.interface'] = '@type',
-  ['@lsp.type.struct'] = '@structure',
-  ['@lsp.type.parameter'] = '@parameter',
-  ['@lsp.type.variable'] = '@variable',
-  ['@lsp.type.property'] = '@property',
-  ['@lsp.type.enumMember'] = '@constant',
-  ['@lsp.type.function'] = '@function',
-  ['@lsp.type.method'] = '@method',
-  ['@lsp.type.macro'] = '@macro',
-  ['@lsp.type.decorator'] = '@function',
-}
-
-for newgroup, oldgroup in pairs(links) do
-  vim.api.nvim_set_hl(0, newgroup, { link = oldgroup, default = true })
-end
-
---- C Sharp ---
-vim.api.nvim_set_hl(0, 'PropertyName', { fg = '#9B59B6' })
-vim.api.nvim_set_hl(0, '@type.builtin.c_sharp', { fg = '#6ab04c' })
-vim.api.nvim_set_hl(0, '@keyword.c_sharp', { fg = '#6ab04c' })
-vim.api.nvim_set_hl(0, '@type.qualifier.c_sharp', { fg = '#6ab04c' })
-vim.api.nvim_set_hl(0, 'ParameterName', { fg = '#C57626' })
-
---- C++ ----
-local keywords = '#6ab04c'
-
-vim.api.nvim_set_hl(0, '@type.builtin.cpp', { fg = keywords })
-vim.api.nvim_set_hl(0, '@type.qualifier.cpp', { fg = keywords })
-vim.api.nvim_set_hl(0, '@conditional.cpp', { fg = keywords })
-vim.api.nvim_set_hl(0, '@repeat.cpp', { fg = keywords })
-vim.api.nvim_set_hl(0, '@boolean.cpp', { fg = keywords })
-vim.api.nvim_set_hl(0, '@constant.builtin.cpp', { fg = keywords })
-vim.api.nvim_set_hl(0, '@keyword.return.cpp', { fg = keywords })
-vim.api.nvim_set_hl(0, '@keyword.return.cpp', { fg = keywords })
-
-vim.api.nvim_set_hl(0, '@conditional.ternary.cpp', { fg = '#dfe6e9' })
-vim.api.nvim_set_hl(0, '@lsp.type.property.cpp', { fg = '#9B59B6' })
-vim.api.nvim_set_hl(0, '@lsp.type.macro.cpp', { fg = '#7ed6df' })
-
-vim.api.nvim_set_hl(0, '@lsp.type.class.cpp', { fg = '#eccc68' })
-
-vim.api.nvim_create_autocmd('LspTokenUpdate', {
-  callback = function(args)
-    local token = args.data.token
-    if
-      token.type == 'class'
-      --token.type == "variable"
-      and token.modifiers.deduced
-      --and not token.modifiers.readonly
-    then
-      --print(tprint(args.data))
-      vim.lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, 'MyMutableGlobalHL')
-    end
-
-    if
-      token.type == 'class'
-      --token.type == "variable"
-      and token.modifiers.defaultLibrary
-      --and not token.modifiers.readonly
-    then
-      --print(tprint(args.data))
-      vim.lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, 'DefaultClassType')
-    end
-
-    if
-      token.type == 'type'
-      --token.type == "variable"
-      and token.modifiers.deduced
-      --and not token.modifiers.readonly
-    then
-      --print(tprint(args.data))
-      vim.lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, 'MyMutableGlobalHL')
-    end
-
-    if
-      token.type == 'type'
-      --token.type == "variable"
-      and token.modifiers.defaultLibrary
-      --and not token.modifiers.readonly
-    then
-      --print(tprint(args.data))
-      vim.lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, 'MyMutableGlobalHL')
-    end
-
-    if
-      token.type == 'class'
-      --token.type == "variable"
-      and token.modifiers.constructorOrDestructor
-      --and not token.modifiers.readonly
-    then
-      --print(tprint(args.data))
-      vim.lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, 'function')
-    end
-  end,
-})
-
-vim.api.nvim_set_hl(0, 'MyMutableGlobalHL', { fg = '#6ab04c' })
-vim.api.nvim_set_hl(0, 'DefaultClassType', { fg = '#009432' })
-vim.api.nvim_set_hl(0, 'DefaultClassType', { fg = '#009432' })
-
-vim.api.nvim_set_hl(0, 'FlashLabel', { bg = '#82ccdd', fg = '#000000', standout = true, bold = true })
-
-vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#82ccdd' })
-
-vim.api.nvim_set_hl(0, 'TelescopepromptBorder', { fg = '#82ccdd' })
-
--- Diff / Git
---
-vim.api.nvim_set_hl(0, 'DiffAdd', { bg = '#12261e' })
-vim.api.nvim_set_hl(0, 'DiffDelete', { bg = '#25171c' })
-vim.api.nvim_set_hl(0, 'DiffChange', { bg = '#0d181f' })
-vim.api.nvim_set_hl(0, 'DiffText', { bg = '#23384c' })
---vim.api.nvim_set_hl(0, 'diffChanged', { bg = '#7AA6DA' })
-
-vim.api.nvim_set_hl(0, 'DiffWordAdd', { bg = '#1d572d' })
-vim.api.nvim_set_hl(0, 'DiffWordDelete', { bg = '#792e2e' })
-
-vim.api.nvim_set_hl(0, 'GitSignsAddLn', { bg = '#12261e' })
-vim.api.nvim_set_hl(0, 'GitSignsDeleteLn', { bg = '#25171c' })
---vim.api.nvim_set_hl(0, 'GitSignsChange', { bg = '#7AA6DA' })
---
---https://www.reddit.com/r/neovim/comments/158zdir/favorite_git_mergetool/
---
---#region
-
---diffChanged
---DiffChange
-
--- vim.api.nvim_set_hl(0, 'DashboardHeader', { fg = '#82ccdd' })
-
--- local map = require 'mini.map'
--- map.setup {
---   integrations = {
---     map.gen_integration.builtin_search(),
---     map.gen_integration.diff(),
---     map.gen_integration.diagnostic(),
---     map.gen_integration.gitsigns(),
---   },
--- }
+require 'custom.keybindings'
+require 'custom.highlights'
