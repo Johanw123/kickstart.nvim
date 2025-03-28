@@ -13,8 +13,6 @@ vim.g.OmniSharp_highlighting = 1
 vim.g.OmniSharp_server_use_net6 = 1
 vim.g.OmniSharp_selector_ui = 'fzf'
 
-vim.treesitter.language.register('glsl', { 'frag', 'vert' })
-
 if vim.fn.has 'win32' == 1 then
   vim.cmd 'language en_US'
 end
@@ -103,20 +101,20 @@ vim.o.completeopt = "menu,noinsert,popup,fuzzy,preview"
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.documentHighlightProvider then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.document_highlight,
-            })
+          -- if client and client.server_capabilities.documentHighlightProvider then
+          --   local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+          --   vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+          --     buffer = event.buf,
+          --     group = highlight_augroup,
+          --     callback = vim.lsp.buf.document_highlight,
+          --   })
   
-            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.clear_references,
-            })
-          end
+          --   vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+          --     buffer = event.buf,
+          --     group = highlight_augroup,
+          --     callback = vim.lsp.buf.clear_references,
+          --   })
+          -- end
   
           -- The following autocommand is used to enable inlay hints in your
           -- code, if the language server you are using supports them
@@ -148,13 +146,13 @@ vim.o.completeopt = "menu,noinsert,popup,fuzzy,preview"
         end,
       })
 
-            vim.api.nvim_create_autocmd('LspDetach', {
-        group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-        callback = function(event)
-          vim.lsp.buf.clear_references()
-          vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event.buf }
-        end,
-      })
+      --       vim.api.nvim_create_autocmd('LspDetach', {
+      --   group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+      --   callback = function(event)
+      --     vim.lsp.buf.clear_references()
+      --     vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event.buf }
+      --   end,
+      -- })
 
 -- vim.api.nvim_create_autocmd('LspAttach', {
 --   callback = function(ev)
@@ -359,6 +357,8 @@ local ensure_installed = {
         glsl_analyzer = {},
 }
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+vim.treesitter.language.register('glsl', { 'frag', 'vert' })
 
 require 'custom.keybindings'
 require 'custom.highlights'
