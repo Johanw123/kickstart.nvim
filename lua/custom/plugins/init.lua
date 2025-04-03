@@ -530,7 +530,6 @@ return {
     },
   },
 
-
   {
     'onsails/lspkind.nvim',
     lazy = true,
@@ -697,18 +696,18 @@ return {
     end,
   },
 
-{
-  'williamboman/mason.nvim',
-  config = true,
-  dependencies = {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    { 'j-hui/fidget.nvim', opts = {} },
-    --{ 'folke/neodev.nvim', opts = {} },
+  {
+    'williamboman/mason.nvim',
+    config = true,
+    dependencies = {
+      'WhoIsSethDaniel/mason-tool-installer.nvim',
+      { 'j-hui/fidget.nvim', opts = {} },
+      --{ 'folke/neodev.nvim', opts = {} },
+    },
   },
-},
 
   {
-    "github/copilot.vim",
+    'github/copilot.vim',
     -- cmd = "Copilot",
     -- event = "BufWinEnter",
     -- init = function()
@@ -730,20 +729,20 @@ return {
   {
     'saghen/blink.cmp',
     -- optional: provides snippets for the snippet source
-    dependencies = { 
+    dependencies = {
       'rafamadriz/friendly-snippets',
       'mikavilpas/blink-ripgrep.nvim',
       'folke/snacks.nvim',
       'fang2hou/blink-copilot',
     },
-  
+
     -- use a release tag to download pre-built binaries
     version = '1.*',
     -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
     -- build = 'cargo build --release',
     -- If you use nix, you can build from source using latest nightly rust with:
     -- build = 'nix run .#build-plugin',
-  
+
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -760,63 +759,61 @@ return {
       --
       -- See :h blink-cmp-config-keymap for defining your own keymap
       keymap = { preset = 'enter' },
-  
+
       appearance = {
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
-        nerd_font_variant = 'mono'
+        nerd_font_variant = 'mono',
       },
-  
+
       -- (Default) Only show the documentation popup when manually triggered
-      completion = { 
+      completion = {
         -- { "label", "label_description", gap = 1 }, { "kind_icon", "kind" }
         documentation = { auto_show = true },
         menu = {
           draw = {
-              -- We don't need label_description now because label and label_description are already
-              -- combined together in label by colorful-menu.nvim.
-              columns = { { "kind_icon" }, { "label", gap = 1 } },
-              components = {
-                  label = {
-                      text = function(ctx)
-                          return require("colorful-menu").blink_components_text(ctx)
-                      end,
-                      highlight = function(ctx)
-                          return require("colorful-menu").blink_components_highlight(ctx)
-                      end,
-                  },
+            -- We don't need label_description now because label and label_description are already
+            -- combined together in label by colorful-menu.nvim.
+            columns = { { 'kind_icon' }, { 'label', gap = 1 } },
+            components = {
+              label = {
+                text = function(ctx)
+                  return require('colorful-menu').blink_components_text(ctx)
+                end,
+                highlight = function(ctx)
+                  return require('colorful-menu').blink_components_highlight(ctx)
+                end,
               },
+            },
           },
-        },      
+        },
       },
-  
-      
 
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
-      sources = {    
+      sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer' },
         providers = {
           -- 👇🏻👇🏻 add the ripgrep provider config below
           ripgrep = {
-            module = "blink-ripgrep",
-            name = "Ripgrep",
+            module = 'blink-ripgrep',
+            name = 'Ripgrep',
             -- -- the options below are optional, some default values are shown
             -- ---@module "blink-ripgrep"
             -- ---@type blink-ripgrep.Options
             -- opts = {
             --   -- For many options, see `rg --help` for an exact description of
             --   -- the values that ripgrep expects.
-  
+
             --   -- the minimum length of the current word to start searching
             --   -- (if the word is shorter than this, the search will not start)
             --   prefix_min_len = 3,
-  
+
             --   -- The number of lines to show around each match in the preview
             --   -- (documentation) window. For example, 5 means to show 5 lines
             --   -- before, then the match, and another 5 lines after the match.
             --   context_size = 5,
-  
+
             --   -- The maximum file size of a file that ripgrep should include in
             --   -- its search. Useful when your project contains large files that
             --   -- might cause performance issues.
@@ -824,7 +821,7 @@ return {
             --   -- "1024" (bytes by default), "200K", "1M", "1G", which will
             --   -- exclude files larger than that size.
             --   max_filesize = "1M",
-  
+
             --   -- Specifies how to find the root of the project where the ripgrep
             --   -- search will start from. Accepts the same options as the marker
             --   -- given to `:h vim.fs.root()` which offers many possibilities for
@@ -834,17 +831,17 @@ return {
             --   -- - ".git" (default)
             --   -- - { ".git", "package.json", ".root" }
             --   project_root_marker = ".git,.ignore",
-  
+
             --   -- Enable fallback to neovim cwd if project_root_marker is not
             --   -- found. Default: `true`, which means to use the cwd.
             --   project_root_fallback = true,
-  
+
             --   -- The casing to use for the search in a format that ripgrep
             --   -- accepts. Defaults to "--ignore-case". See `rg --help` for all the
             --   -- available options ripgrep supports, but you can try
             --   -- "--case-sensitive" or "--smart-case".
             --   search_casing = "--ignore-case",
-  
+
             --   -- (advanced) Any additional options you want to give to ripgrep.
             --   -- See `rg -h` for a list of all available options. Might be
             --   -- helpful in adjusting performance in specific situations.
@@ -852,12 +849,12 @@ return {
             --   --
             --   -- Not everything will work (obviously).
             --   additional_rg_options = {},
-  
+
             --   -- When a result is found for a file whose filetype does not have a
             --   -- treesitter parser installed, fall back to regex based highlighting
             --   -- that is bundled in Neovim.
             --   fallback_to_regex_highlighting = true,
-  
+
             --   -- Absolute root paths where the rg command will not be executed.
             --   -- Usually you want to exclude paths using gitignore files or
             --   -- ripgrep specific ignore files, but this can be used to only
@@ -866,14 +863,14 @@ return {
             --   -- to find out where the searches are executed, enable `debug` and
             --   -- look at `:messages`.
             --   ignore_paths = {},
-  
+
             --   -- Any additional paths to search in, in addition to the project
             --   -- root. This can be useful if you want to include dictionary files
             --   -- (/usr/share/dict/words), framework documentation, or any other
             --   -- reference material that is not available within the project
             --   -- root.
             --   additional_paths = {},
-  
+
             --   -- Features that are not yet stable and might change in the future.
             --   -- You can enable these to try them out beforehand, but be aware
             --   -- that they might change. Nothing is enabled by default.
@@ -886,7 +883,7 @@ return {
             --       -- completion results. Example: "<leader>tg"
             --       on_off = "<leader>tg",
             --     },
-  
+
             --     -- The backend to use for searching. Defaults to "ripgrep".
             --     -- Available options:
             --     -- - "ripgrep", always use ripgrep
@@ -894,7 +891,7 @@ return {
             --     -- - "gitgrep-or-ripgrep", use git grep if possible, otherwise ripgrep
             --     backend = "gitgrep-or-ripgrep",
             --   },
-  
+
             --   -- Show debug information in `:messages` that can help in
             --   -- diagnosing issues with the plugin.
             --   debug = true,
@@ -906,15 +903,15 @@ return {
               for _, item in ipairs(items) do
                 -- example: append a description to easily distinguish rg results
                 item.labelDetails = {
-                  description = "(rg)",
+                  description = '(rg)',
                 }
               end
               return items
             end,
           },
           copilot = {
-            name = "copilot",
-            module = "blink-copilot",
+            name = 'copilot',
+            module = 'blink-copilot',
             score_offset = 100,
             async = true,
           },
@@ -923,14 +920,14 @@ return {
 
       keymap = {
         -- 👇🏻👇🏻 (optional) add a keymap to invoke the search manually
-        ["<c-r>"] = {
+        ['<c-r>'] = {
           function()
-            require("blink-cmp").show({ providers = { "ripgrep" } })
+            require('blink-cmp').show { providers = { 'ripgrep' } }
           end,
         },
-        ["<c-g>"] = {
+        ['<c-g>'] = {
           function()
-            require("blink-cmp").show({ providers = { "copilot" } })
+            require('blink-cmp').show { providers = { 'copilot' } }
           end,
         },
 
@@ -949,113 +946,109 @@ return {
         ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
         ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
 
-        ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' }
+        ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
       },
-  
+
       -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
       -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
       -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
       --
       -- See the fuzzy documentation for more information
-      fuzzy = { implementation = "prefer_rust_with_warning" }
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
     },
-    opts_extend = { "sources.default" }
+    opts_extend = { 'sources.default' },
   },
-
 
   {
 
-    "xzbdmw/colorful-menu.nvim",
+    'xzbdmw/colorful-menu.nvim',
     config = function()
-        -- You don't need to set these options.
-        require("colorful-menu").setup({
-            ls = {
-                lua_ls = {
-                    -- Maybe you want to dim arguments a bit.
-                    arguments_hl = "@comment",
-                },
-                gopls = {
-                    -- By default, we render variable/function's type in the right most side,
-                    -- to make them not to crowd together with the original label.
+      -- You don't need to set these options.
+      require('colorful-menu').setup {
+        ls = {
+          lua_ls = {
+            -- Maybe you want to dim arguments a bit.
+            arguments_hl = '@comment',
+          },
+          gopls = {
+            -- By default, we render variable/function's type in the right most side,
+            -- to make them not to crowd together with the original label.
 
-                    -- when true:
-                    -- foo             *Foo
-                    -- ast         "go/ast"
+            -- when true:
+            -- foo             *Foo
+            -- ast         "go/ast"
 
-                    -- when false:
-                    -- foo *Foo
-                    -- ast "go/ast"
-                    align_type_to_right = true,
-                    -- When true, label for field and variable will format like "foo: Foo"
-                    -- instead of go's original syntax "foo Foo". If align_type_to_right is
-                    -- true, this option has no effect.
-                    add_colon_before_type = false,
-                    -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
-                    preserve_type_when_truncate = true,
-                },
-                -- for lsp_config or typescript-tools
-                ts_ls = {
-                    -- false means do not include any extra info,
-                    -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
-                    extra_info_hl = "@comment",
-                },
-                vtsls = {
-                    -- false means do not include any extra info,
-                    -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
-                    extra_info_hl = "@comment",
-                },
-                ["rust-analyzer"] = {
-                    -- Such as (as Iterator), (use std::io).
-                    extra_info_hl = "@comment",
-                    -- Similar to the same setting of gopls.
-                    align_type_to_right = true,
-                    -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
-                    preserve_type_when_truncate = true,
-                },
-                clangd = {
-                    -- Such as "From <stdio.h>".
-                    extra_info_hl = "@comment",
-                    -- Similar to the same setting of gopls.
-                    align_type_to_right = true,
-                    -- the hl group of leading dot of "•std::filesystem::permissions(..)"
-                    import_dot_hl = "@comment",
-                    -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
-                    preserve_type_when_truncate = true,
-                },
-                zls = {
-                    -- Similar to the same setting of gopls.
-                    align_type_to_right = true,
-                },
-                roslyn = {
-                    extra_info_hl = "@comment",
-                },
-                dartls = {
-                    extra_info_hl = "@comment",
-                },
-                -- The same applies to pyright/pylance
-                basedpyright = {
-                    -- It is usually import path such as "os"
-                    extra_info_hl = "@comment",
-                },
-                -- If true, try to highlight "not supported" languages.
-                fallback = true,
-                -- this will be applied to label description for unsupport languages
-                fallback_extra_info_hl = "@comment",
-            },
-            -- If the built-in logic fails to find a suitable highlight group for a label,
-            -- this highlight is applied to the label.
-            fallback_highlight = "@variable",
-            -- If provided, the plugin truncates the final displayed text to
-            -- this width (measured in display cells). Any highlights that extend
-            -- beyond the truncation point are ignored. When set to a float
-            -- between 0 and 1, it'll be treated as percentage of the width of
-            -- the window: math.floor(max_width * vim.api.nvim_win_get_width(0))
-            -- Default 60.
-            max_width = 60,
-        })
+            -- when false:
+            -- foo *Foo
+            -- ast "go/ast"
+            align_type_to_right = true,
+            -- When true, label for field and variable will format like "foo: Foo"
+            -- instead of go's original syntax "foo Foo". If align_type_to_right is
+            -- true, this option has no effect.
+            add_colon_before_type = false,
+            -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
+            preserve_type_when_truncate = true,
+          },
+          -- for lsp_config or typescript-tools
+          ts_ls = {
+            -- false means do not include any extra info,
+            -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
+            extra_info_hl = '@comment',
+          },
+          vtsls = {
+            -- false means do not include any extra info,
+            -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
+            extra_info_hl = '@comment',
+          },
+          ['rust-analyzer'] = {
+            -- Such as (as Iterator), (use std::io).
+            extra_info_hl = '@comment',
+            -- Similar to the same setting of gopls.
+            align_type_to_right = true,
+            -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
+            preserve_type_when_truncate = true,
+          },
+          clangd = {
+            -- Such as "From <stdio.h>".
+            extra_info_hl = '@comment',
+            -- Similar to the same setting of gopls.
+            align_type_to_right = true,
+            -- the hl group of leading dot of "•std::filesystem::permissions(..)"
+            import_dot_hl = '@comment',
+            -- See https://github.com/xzbdmw/colorful-menu.nvim/pull/36
+            preserve_type_when_truncate = true,
+          },
+          zls = {
+            -- Similar to the same setting of gopls.
+            align_type_to_right = true,
+          },
+          roslyn = {
+            extra_info_hl = '@comment',
+          },
+          dartls = {
+            extra_info_hl = '@comment',
+          },
+          -- The same applies to pyright/pylance
+          basedpyright = {
+            -- It is usually import path such as "os"
+            extra_info_hl = '@comment',
+          },
+          -- If true, try to highlight "not supported" languages.
+          fallback = true,
+          -- this will be applied to label description for unsupport languages
+          fallback_extra_info_hl = '@comment',
+        },
+        -- If the built-in logic fails to find a suitable highlight group for a label,
+        -- this highlight is applied to the label.
+        fallback_highlight = '@variable',
+        -- If provided, the plugin truncates the final displayed text to
+        -- this width (measured in display cells). Any highlights that extend
+        -- beyond the truncation point are ignored. When set to a float
+        -- between 0 and 1, it'll be treated as percentage of the width of
+        -- the window: math.floor(max_width * vim.api.nvim_win_get_width(0))
+        -- Default 60.
+        max_width = 60,
+      }
     end,
-
   },
-
-
 }
