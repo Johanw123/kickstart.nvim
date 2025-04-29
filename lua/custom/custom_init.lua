@@ -31,6 +31,7 @@ opt.linespace = 5
 --vim.o.winborder = 'rounded'
 
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ','
 
 -- vim.diagnostic.config { virtual_text = true, virtual_lines = true }
 -- vim.diagnostic.config { virtual_text = true, virtual_lines = false }
@@ -398,4 +399,3 @@ vim.treesitter.language.register('glsl', { 'frag', 'vert' })
 
 require 'custom.keybindings'
 require 'custom.highlights'
-
