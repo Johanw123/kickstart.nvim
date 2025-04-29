@@ -126,10 +126,12 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- debuggers
-    local lldb = require 'custom.configs.dap.adapters.lldb'
+    require 'custom.configs.dap'
 
-    dap.adapters.lldb = lldb.adapter
+    -- debuggers
+    --local lldb = require 'custom.configs.dap.adapters.lldb'
+
+    --dap.adapters.lldb = lldb.adapter
 
     --dap.configurations.c = lldb.config
     --dap.configurations.cpp = lldb.config
