@@ -288,6 +288,16 @@ return {
   },
 
   {
+    'miroshQa/debugmaster.nvim',
+    config = function()
+      local dm = require 'debugmaster'
+      -- make sure you don't have any other keymaps that starts with "<leader>d" to avoid delay
+      vim.keymap.set({ 'n', 'v' }, '<leader>dd', dm.mode.toggle, { nowait = true })
+      vim.keymap.set('t', '<C-/>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+    end,
+  },
+
+  {
     'Hoffs/omnisharp-extended-lsp.nvim',
   },
 
