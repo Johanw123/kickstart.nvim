@@ -22,15 +22,14 @@ M.config = {
   -- 	end,
   -- },
 
-  
   {
     name = 'quickSimLapsim',
     type = 'lldb',
     request = 'launch',
-    program = '${workspaceFolder}/Runtime/LapSim/bin_unopt/quickSim.exe',
-    cwd = '${workspaceFolder}/Runtime/LapSim/bin_unopt/',
-    stopOnEntry = false,
-    args = {},
+    -- program = '${workspaceFolder}/Runtime/LapSim/bin_unopt/quickSim.exe',
+    -- cwd = '${workspaceFolder}/Runtime/LapSim/bin_unopt/',
+    -- stopOnEntry = false,
+    -- args = {},
   },
 }
 

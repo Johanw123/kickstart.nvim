@@ -253,6 +253,22 @@ return {
     lazy = true,
   },
 
+  {
+    'MagicDuck/grug-far.nvim',
+    -- Note (lazy loading): grug-far.lua defers all it's requires so it's lazy by default
+    -- additional lazy config to defer loading is not really needed...
+    config = function()
+      -- optional setup call to override plugin options
+      -- alternatively you can set options with vim.g.grug_far = { ... }
+      require('grug-far').setup {
+        -- options, see Configuration section below
+        -- there are no required options atm
+        -- engine = 'ripgrep' is default, but 'astgrep' or 'astgrep-rules' can
+        -- be specified
+      }
+    end,
+  },
+
   -- Dap
   -- {
   --   'mfussenegger/nvim-dap',
@@ -272,6 +288,16 @@ return {
   },
 
   {
+    'miroshQa/debugmaster.nvim',
+    config = function()
+      local dm = require 'debugmaster'
+      -- make sure you don't have any other keymaps that starts with "<leader>d" to avoid delay
+      vim.keymap.set({ 'n', 'v' }, '<leader>dd', dm.mode.toggle, { nowait = true })
+      vim.keymap.set('t', '<C-/>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+    end,
+  },
+
+  {
     'Hoffs/omnisharp-extended-lsp.nvim',
   },
 
@@ -279,36 +305,47 @@ return {
   --   --Before trying to use the language server you should install it. You can do so by running :CSInstallRoslyn which will install the configured version of the plugin in neovim's datadir.
   --   'jmederosalvarado/roslyn.nvim',
   -- },
+  -- {
+  --   'seblj/roslyn.nvim',
+  --   ft = 'cs',
+  --   opts = {
+  --     config = {
+  --       settings = {
+  --         ['csharp|inlay_hints'] = {
+  --           csharp_enable_inlay_hints_for_implicit_object_creation = true,
+  --           csharp_enable_inlay_hints_for_implicit_variable_types = true,
+  --           csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+  --           csharp_enable_inlay_hints_for_types = true,
+  --           dotnet_enable_inlay_hints_for_indexer_parameters = true,
+  --           dotnet_enable_inlay_hints_for_literal_parameters = true,
+  --           dotnet_enable_inlay_hints_for_object_creation_parameters = true,
+  --           dotnet_enable_inlay_hints_for_other_parameters = true,
+  --           dotnet_enable_inlay_hints_for_parameters = true,
+  --           dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
+  --           dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
+  --           dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
+  --         },
+  --         ['csharp|code_lens'] = {
+  --           dotnet_enable_references_code_lens = true,
+  --         },
+  --       },
+  --     },
+  --     exe = {
+  --       'dotnet',
+  --
+  --       vim.fs.joinpath(vim.fn.stdpath 'data', 'mason', 'packages', 'roslyn', 'libexec', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
+  --     },
+  --   },
+  -- },
+  --
   {
-    'seblj/roslyn.nvim',
+    'seblyng/roslyn.nvim',
     ft = 'cs',
+    ---@module 'roslyn.config'
+    ---@type RoslynNvimConfig
     opts = {
-      config = {
-        settings = {
-          ['csharp|inlay_hints'] = {
-            csharp_enable_inlay_hints_for_implicit_object_creation = true,
-            csharp_enable_inlay_hints_for_implicit_variable_types = true,
-            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
-            csharp_enable_inlay_hints_for_types = true,
-            dotnet_enable_inlay_hints_for_indexer_parameters = true,
-            dotnet_enable_inlay_hints_for_literal_parameters = true,
-            dotnet_enable_inlay_hints_for_object_creation_parameters = true,
-            dotnet_enable_inlay_hints_for_other_parameters = true,
-            dotnet_enable_inlay_hints_for_parameters = true,
-            dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
-            dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
-            dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
-          },
-          ['csharp|code_lens'] = {
-            dotnet_enable_references_code_lens = true,
-          },
-        },
-      },
-      exe = {
-        'dotnet',
-
-        vim.fs.joinpath(vim.fn.stdpath 'data', 'mason', 'packages', 'roslyn', 'libexec', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
-      },
+      -- your configuration comes here; leave empty for default settings
+      -- NOTE: You must configure `cmd` in `config.cmd` unless you have installed via mason
     },
   },
 
@@ -331,6 +368,19 @@ return {
     },
     config = true,
     lazy = true,
+  },
+  {
+    'pwntester/octo.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      -- 'nvim-telescope/telescope.nvim',
+      'ibhagwan/fzf-lua',
+      -- OR 'folke/snacks.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('octo').setup()
+    end,
   },
   {
     'stevearc/oil.nvim',
