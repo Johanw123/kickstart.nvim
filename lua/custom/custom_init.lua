@@ -304,6 +304,13 @@ elseif vim.fn.has 'win32' == 1 and vim.fn.has 'wsl' == 0 then
   })
 end
 
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  pattern = { '*.xaml' },
+  callback = function()
+    vim.cmd.setfiletype 'xml'
+  end,
+})
+
 local highlight = {
   'IndentLineColor',
 }
@@ -398,4 +405,3 @@ vim.treesitter.language.register('glsl', { 'frag', 'vert' })
 
 require 'custom.keybindings'
 require 'custom.highlights'
-
