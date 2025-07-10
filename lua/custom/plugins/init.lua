@@ -998,16 +998,16 @@ return {
     end,
   },
 
-  {
-    'ravitemer/mcphub.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    build = 'npm install -g mcp-hub@latest', -- Installs `mcp-hub` node binary globally
-    config = function()
-      require('mcphub').setup()
-    end,
-  },
+  -- {
+  --   'ravitemer/mcphub.nvim',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --   },
+  --   build = 'npm install -g mcp-hub@latest', -- Installs `mcp-hub` node binary globally
+  --   config = function()
+  --     require('mcphub').setup()
+  --   end,
+  -- },
 
   { --https://composio.dev/blog/how-to-transform-your-neovim-to-cursor-in-minutes
     'yetone/avante.nvim',
