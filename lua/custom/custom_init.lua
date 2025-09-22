@@ -12,6 +12,8 @@ opt.fillchars = { eob = ' ' }
 vim.g.OmniSharp_highlighting = 1
 vim.g.OmniSharp_server_use_net6 = 1
 vim.g.OmniSharp_selector_ui = 'fzf'
+vim.g.editorconfig = false
+
 
 if vim.fn.has 'win32' == 1 then
   vim.cmd 'language en_US'
@@ -27,6 +29,9 @@ opt.tabstop = 2
 opt.softtabstop = 2
 
 opt.linespace = 5
+
+opt.foldminlines = 0 -- Allow folding/hiding single lines
+opt.fillchars = "fold: " -- Remove the trailing dots
 
 --vim.o.winborder = 'rounded'
 

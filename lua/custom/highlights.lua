@@ -147,3 +147,6 @@ vim.api.nvim_set_hl(0, 'GitSignsDeleteLn', { bg = '#25171c' })
 --DiffChange
 
 -- vim.api.nvim_set_hl(0, 'DashboardHeader', { fg = '#82ccdd' })
+
+vim.api.nvim_set_hl(0, 'Folded', { bg = "#1E222A", fg = "#444A51", italic=true})
+-- vim.api.nvim_set_hl(0, 'FoldColumn', { bg = "#99272e"})
