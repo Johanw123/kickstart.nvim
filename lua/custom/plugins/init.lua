@@ -375,7 +375,16 @@ return {
 
   {
     'lewis6991/satellite.nvim',
+    config = function()
+      require('satellite').setup(
+        {
+          winblend = 0
+        }
+      )
+    end,
+
   },
+  { "typicode/bg.nvim", lazy = false },
   {
     'ThePrimeagen/harpoon',
     lazy = true,
