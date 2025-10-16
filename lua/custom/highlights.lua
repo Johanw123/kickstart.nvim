@@ -150,3 +150,10 @@ vim.api.nvim_set_hl(0, 'GitSignsDeleteLn', { bg = '#25171c' })
 
 vim.api.nvim_set_hl(0, 'Folded', { bg = "#1E222A", fg = "#444A51", italic=true})
 -- vim.api.nvim_set_hl(0, 'FoldColumn', { bg = "#99272e"})
+--
+--
+
+
+vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', ctermbg = 'NONE' })
+
