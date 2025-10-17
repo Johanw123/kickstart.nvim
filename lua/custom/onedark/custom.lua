@@ -123,3 +123,8 @@ vim.api.nvim_set_hl(0, 'DefaultClassType', {  fg = "#009432", })
 vim.api.nvim_set_hl(0, 'DefaultClassType', {  fg = "#009432", })
 
 vim.api.nvim_set_hl(0, 'FlashLabel', { bg ="#82ccdd", fg = "#000000", standout=true, bold=true, })
+
+
+-- vim.api.nvim_get_hl(0, 'Folded', { bg = "#99272e", fg = "#dfe6e9"})
+-- vim.api.nvim_get_hl(0, 'FoldColumn', { bg = "#99272e", fg = "#dfe6e9"})
+

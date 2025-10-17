@@ -301,43 +301,6 @@ return {
     'Hoffs/omnisharp-extended-lsp.nvim',
   },
 
-  -- {
-  --   --Before trying to use the language server you should install it. You can do so by running :CSInstallRoslyn which will install the configured version of the plugin in neovim's datadir.
-  --   'jmederosalvarado/roslyn.nvim',
-  -- },
-  -- {
-  --   'seblj/roslyn.nvim',
-  --   ft = 'cs',
-  --   opts = {
-  --     config = {
-  --       settings = {
-  --         ['csharp|inlay_hints'] = {
-  --           csharp_enable_inlay_hints_for_implicit_object_creation = true,
-  --           csharp_enable_inlay_hints_for_implicit_variable_types = true,
-  --           csharp_enable_inlay_hints_for_lambda_parameter_types = true,
-  --           csharp_enable_inlay_hints_for_types = true,
-  --           dotnet_enable_inlay_hints_for_indexer_parameters = true,
-  --           dotnet_enable_inlay_hints_for_literal_parameters = true,
-  --           dotnet_enable_inlay_hints_for_object_creation_parameters = true,
-  --           dotnet_enable_inlay_hints_for_other_parameters = true,
-  --           dotnet_enable_inlay_hints_for_parameters = true,
-  --           dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
-  --           dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
-  --           dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
-  --         },
-  --         ['csharp|code_lens'] = {
-  --           dotnet_enable_references_code_lens = true,
-  --         },
-  --       },
-  --     },
-  --     exe = {
-  --       'dotnet',
-  --
-  --       vim.fs.joinpath(vim.fn.stdpath 'data', 'mason', 'packages', 'roslyn', 'libexec', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
-  --     },
-  --   },
-  -- },
-  --
   {
     'seblyng/roslyn.nvim',
     ft = 'cs',
@@ -349,12 +312,12 @@ return {
     },
   },
 
-  {
-    'GustavEikaas/easy-dotnet.nvim',
-    config = function()
-      require('easy-dotnet').setup()
-    end,
-  },
+  -- {
+  --   'GustavEikaas/easy-dotnet.nvim',
+  --   config = function()
+  --     require('easy-dotnet').setup()
+  --   end,
+  -- },
 
   {
     'NeogitOrg/neogit',
@@ -398,15 +361,6 @@ return {
     end,
   },
 
-  -- {
-  --   'petertriho/nvim-scrollbar',
-  --   lazy = false,
-  --   config = function()
-  --     require('scrollbar').setup()
-  --   end,
-  -- },
-  --
-
   {
     'stevearc/aerial.nvim',
     lazy = true,
@@ -421,80 +375,16 @@ return {
 
   {
     'lewis6991/satellite.nvim',
+    config = function()
+      require('satellite').setup(
+        {
+          winblend = 0
+        }
+      )
+    end,
+
   },
-  -- {
-  --   'gorbit99/codewindow.nvim',
-  --   config = function()
-  --     local codewindow = require 'codewindow'
-  --     codewindow.setup()
-  --     codewindow.apply_default_keybinds()
-  --   end,
-  -- },
-  -- { 'echasnovski/mini.map', version = false },
-
-  -- ---@module "neominimap.config.meta"
-  -- {
-  --   'Isrothy/neominimap.nvim',
-  --   version = 'v3.*.*',
-  --   enabled = true,
-  --   lazy = false, -- NOTE: NO NEED to Lazy load
-  --   -- Optional
-  --   keys = {
-  --     -- Global Minimap Controls
-  --     { '<leader>nm', '<cmd>Neominimap toggle<cr>', desc = 'Toggle global minimap' },
-  --     { '<leader>no', '<cmd>Neominimap on<cr>', desc = 'Enable global minimap' },
-  --     { '<leader>nc', '<cmd>Neominimap off<cr>', desc = 'Disable global minimap' },
-  --     { '<leader>nr', '<cmd>Neominimap refresh<cr>', desc = 'Refresh global minimap' },
-  --
-  --     -- Window-Specific Minimap Controls
-  --     { '<leader>nwt', '<cmd>Neominimap winToggle<cr>', desc = 'Toggle minimap for current window' },
-  --     { '<leader>nwr', '<cmd>Neominimap winRefresh<cr>', desc = 'Refresh minimap for current window' },
-  --     { '<leader>nwo', '<cmd>Neominimap winOn<cr>', desc = 'Enable minimap for current window' },
-  --     { '<leader>nwc', '<cmd>Neominimap winOff<cr>', desc = 'Disable minimap for current window' },
-  --
-  --     -- Tab-Specific Minimap Controls
-  --     { '<leader>ntt', '<cmd>Neominimap tabToggle<cr>', desc = 'Toggle minimap for current tab' },
-  --     { '<leader>ntr', '<cmd>Neominimap tabRefresh<cr>', desc = 'Refresh minimap for current tab' },
-  --     { '<leader>nto', '<cmd>Neominimap tabOn<cr>', desc = 'Enable minimap for current tab' },
-  --     { '<leader>ntc', '<cmd>Neominimap tabOff<cr>', desc = 'Disable minimap for current tab' },
-  --
-  --     -- Buffer-Specific Minimap Controls
-  --     { '<leader>nbt', '<cmd>Neominimap bufToggle<cr>', desc = 'Toggle minimap for current buffer' },
-  --     { '<leader>nbr', '<cmd>Neominimap bufRefresh<cr>', desc = 'Refresh minimap for current buffer' },
-  --     { '<leader>nbo', '<cmd>Neominimap bufOn<cr>', desc = 'Enable minimap for current buffer' },
-  --     { '<leader>nbc', '<cmd>Neominimap bufOff<cr>', desc = 'Disable minimap for current buffer' },
-  --
-  --     ---Focus Controls
-  --     { '<leader>nf', '<cmd>Neominimap focus<cr>', desc = 'Focus on minimap' },
-  --     { '<leader>nu', '<cmd>Neominimap unfocus<cr>', desc = 'Unfocus minimap' },
-  --     { '<leader>ns', '<cmd>Neominimap toggleFocus<cr>', desc = 'Switch focus on minimap' },
-  --   },
-  --   init = function()
-  --     -- The following options are recommended when layout == "float"
-  --     vim.opt.wrap = false
-  --     vim.opt.sidescrolloff = 36 -- Set a large value
-  --
-  --     --- Put your configuration here
-  --     ---@type Neominimap.UserConfig
-  --     vim.g.neominimap = {
-  --       auto_enable = true,
-  --       x_multiplier = 4,
-  --       y_multiplier = 1,
-  --       layout = 'float',
-  --       float = {
-  --         z_index = 10,
-  --         window_border = 'single',
-  --         margin = {
-  --           right = 4,
-  --         },
-  --       },
-  --       win_filter = function(winid)
-  --         return winid == vim.api.nvim_get_current_win()
-  --       end,
-  --     }
-  --   end,
-  -- },
-
+  { "typicode/bg.nvim", lazy = false },
   {
     'ThePrimeagen/harpoon',
     lazy = true,
@@ -791,6 +681,7 @@ return {
       'mikavilpas/blink-ripgrep.nvim',
       'folke/snacks.nvim',
       'fang2hou/blink-copilot',
+      'Kaiser-Yang/blink-cmp-avante',
     },
 
     -- use a release tag to download pre-built binaries
@@ -849,7 +740,7 @@ return {
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'avante', 'lsp', 'path', 'snippets', 'buffer' },
         providers = {
           -- 👇🏻👇🏻 add the ripgrep provider config below
           ripgrep = {
@@ -965,6 +856,13 @@ return {
               end
               return items
             end,
+          },
+          avante = {
+            module = 'blink-cmp-avante',
+            name = 'Avante',
+            opts = {
+              -- options for blink-cmp-avante
+            },
           },
           copilot = {
             name = 'copilot',
@@ -1107,5 +1005,167 @@ return {
         max_width = 60,
       }
     end,
+  },
+
+  -- {
+  --   'ravitemer/mcphub.nvim',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --   },
+  --   build = 'npm install -g mcp-hub@latest', -- Installs `mcp-hub` node binary globally
+  --   config = function()
+  --     require('mcphub').setup()
+  --   end,
+  -- },
+
+  { --https://composio.dev/blog/how-to-transform-your-neovim-to-cursor-in-minutes
+    'yetone/avante.nvim',
+    build = function()
+      -- conditionally use the correct build system for the current OS
+      if vim.fn.has 'win32' == 1 then
+        return 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false'
+      else
+        return 'make'
+      end
+    end,
+    event = 'VeryLazy',
+    version = false, -- Never set this value to "*"! Never!
+    ---@module 'avante'
+    ---@type avante.Config
+    opts = {
+      provider = 'ollama',
+      providers = {
+        ollama = {
+          endpoint = 'http://127.0.0.1:11434', -- Note that there is no /v1 at the end.
+          model = 'qwen2.5-coder:14b',
+        },
+      },
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+      --- The below dependencies are optional,
+      'echasnovski/mini.pick', -- for file_selector provider mini.pick
+      'nvim-telescope/telescope.nvim', -- for file_selector provider telescope
+      'hrsh7th/nvim-cmp', -- autocompletion for avante commands and mentions
+      'ibhagwan/fzf-lua', -- for file_selector provider fzf
+      'stevearc/dressing.nvim', -- for input provider dressing
+      'folke/snacks.nvim', -- for input provider snacks
+      'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
+      'zbirenbaum/copilot.lua', -- for providers='copilot'
+      {
+        -- support for image pasting
+        'HakonHarnes/img-clip.nvim',
+        event = 'VeryLazy',
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          file_types = { 'markdown', 'Avante' },
+        },
+        ft = { 'markdown', 'Avante' },
+      },
+    },
+    -- config = function()
+    --   require('avante').setup {
+    --     -- system_prompt as function ensures LLM always has latest MCP server state
+    --     -- This is evaluated for every message, even in existing chats
+    --     system_prompt = function()
+    --       local hub = require('mcphub').get_hub_instance()
+    --       return hub and hub:get_active_servers_prompt() or ''
+    --     end,
+    --     -- Using function prevents requiring mcphub before it's loaded
+    --     custom_tools = function()
+    --       return {
+    --         require('mcphub.extensions.avante').mcp_tool(),
+    --       }
+    --     end,
+    --   }
+    -- end,
+    --
+  {
+      "soemre/commentless.nvim",
+      cmd = "Commentless",
+      keys = {
+          {
+              "<leader>/",
+              function()
+                  require("commentless").toggle()
+              end,
+              desc = "Toggle Comments",
+          },
+      },
+      dependencies = {
+          "nvim-treesitter/nvim-treesitter",
+      },
+      opts = {
+        hide_following_blank_lines = true,
+        foldtext = function(folded_count)
+            return "(" .. folded_count .. " comments)"
+        end,
+      },
+  },
+
+  {
+    "Isrothy/neominimap.nvim",
+    version = "v3.x.x",
+    lazy = false, -- NOTE: NO NEED to Lazy load
+    -- Optional. You can alse set your own keybindings
+    keys = {
+      -- Global Minimap Controls
+      { "<leader>nm", "<cmd>Neominimap Toggle<cr>", desc = "Toggle global minimap" },
+      { "<leader>no", "<cmd>Neominimap Enable<cr>", desc = "Enable global minimap" },
+      { "<leader>nc", "<cmd>Neominimap Disable<cr>", desc = "Disable global minimap" },
+      { "<leader>nr", "<cmd>Neominimap Refresh<cr>", desc = "Refresh global minimap" },
+
+      -- Window-Specific Minimap Controls
+      { "<leader>nwt", "<cmd>Neominimap WinToggle<cr>", desc = "Toggle minimap for current window" },
+      { "<leader>nwr", "<cmd>Neominimap WinRefresh<cr>", desc = "Refresh minimap for current window" },
+      { "<leader>nwo", "<cmd>Neominimap WinEnable<cr>", desc = "Enable minimap for current window" },
+      { "<leader>nwc", "<cmd>Neominimap WinDisable<cr>", desc = "Disable minimap for current window" },
+
+      -- Tab-Specific Minimap Controls
+      { "<leader>ntt", "<cmd>Neominimap TabToggle<cr>", desc = "Toggle minimap for current tab" },
+      { "<leader>ntr", "<cmd>Neominimap TabRefresh<cr>", desc = "Refresh minimap for current tab" },
+      { "<leader>nto", "<cmd>Neominimap TabEnable<cr>", desc = "Enable minimap for current tab" },
+      { "<leader>ntc", "<cmd>Neominimap TabDisable<cr>", desc = "Disable minimap for current tab" },
+
+      -- Buffer-Specific Minimap Controls
+      { "<leader>nbt", "<cmd>Neominimap BufToggle<cr>", desc = "Toggle minimap for current buffer" },
+      { "<leader>nbr", "<cmd>Neominimap BufRefresh<cr>", desc = "Refresh minimap for current buffer" },
+      { "<leader>nbo", "<cmd>Neominimap BufEnable<cr>", desc = "Enable minimap for current buffer" },
+      { "<leader>nbc", "<cmd>Neominimap BufDisable<cr>", desc = "Disable minimap for current buffer" },
+
+      ---Focus Controls
+      { "<leader>nf", "<cmd>Neominimap Focus<cr>", desc = "Focus on minimap" },
+      { "<leader>nu", "<cmd>Neominimap Unfocus<cr>", desc = "Unfocus minimap" },
+      { "<leader>ns", "<cmd>Neominimap ToggleFocus<cr>", desc = "Switch focus on minimap" },
+    },
+    init = function()
+      -- The following options are recommended when layout == "float"
+      vim.opt.wrap = false
+      vim.opt.sidescrolloff = 36 -- Set a large value
+
+      --- Put your configuration here
+      ---@type Neominimap.UserConfig
+      vim.g.neominimap = {
+        auto_enable = false,
+      }
+    end,
+  },
+
   },
 }

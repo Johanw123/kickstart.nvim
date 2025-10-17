@@ -135,6 +135,8 @@ vim.api.nvim_set_hl(0, 'DiffText', { bg = '#23384c' })
 vim.api.nvim_set_hl(0, 'DiffWordAdd', { bg = '#1d572d' })
 vim.api.nvim_set_hl(0, 'DiffWordDelete', { bg = '#792e2e' })
 
+
+
 vim.api.nvim_set_hl(0, 'GitSignsAddLn', { bg = '#12261e' })
 vim.api.nvim_set_hl(0, 'GitSignsDeleteLn', { bg = '#25171c' })
 --vim.api.nvim_set_hl(0, 'GitSignsChange', { bg = '#7AA6DA' })
@@ -147,3 +149,17 @@ vim.api.nvim_set_hl(0, 'GitSignsDeleteLn', { bg = '#25171c' })
 --DiffChange
 
 -- vim.api.nvim_set_hl(0, 'DashboardHeader', { fg = '#82ccdd' })
+
+vim.api.nvim_set_hl(0, 'Folded', { bg = "#1E222A", fg = "#444A51", italic=true})
+-- vim.api.nvim_set_hl(0, 'FoldColumn', { bg = "#99272e"})
+--
+--
+
+
+vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', ctermbg = 'NONE' })
+
+
+vim.api.nvim_set_hl(0, 'SatelliteCursor', { bg = 'NONE', ctermbg = 'NONE' })
+
+
