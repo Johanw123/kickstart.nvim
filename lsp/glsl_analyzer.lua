@@ -1,6 +1,6 @@
 return {
     cmd = { 'glsl_analyzer' },
-    filetypes = { 'glsl', 'vert', 'tesc', 'tese', 'frag', 'geom', 'comp' },
+    filetypes = { 'glsl', 'vert', 'tesc', 'tese', 'frag', 'geom', 'comp', 'fx' },
     -- root_dir = function(fname)
     --   return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
     -- end,

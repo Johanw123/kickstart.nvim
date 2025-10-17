@@ -1066,6 +1066,7 @@ require('lazy').setup({
         'make',
         'cmake',
         'zig',
+        'hlsl',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
