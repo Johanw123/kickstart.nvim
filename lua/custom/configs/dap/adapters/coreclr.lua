@@ -3,7 +3,7 @@ local M = {}
 M.adapter = {
   type = 'executable',
   --command = '/usr/local/bin/netcoredbg/netcoredbg',
-  command = '/Users/johanwangsell/Dev/netcoredbg/bin/netcoredbg',
+  command = '/usr/bin/netcoredbg',
   name = 'coreclr',
   args = { '--interpreter=vscode' },
 }

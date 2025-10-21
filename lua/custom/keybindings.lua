@@ -200,3 +200,15 @@ end, { desc = 'Buffer History Preview ' })
 
 -- set default off
 --require('precognition').toggle()
+--
+--
+
+vim.keymap.set({ 'n', 't' }, '<F4>', function()
+  require("nvchad.term").runner {
+    pos = "float",
+    cmd = "dotnet run",
+    id = "floatTerm",
+    clear_cmd = false
+  } 
+end)
+                                  
