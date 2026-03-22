@@ -362,6 +362,12 @@ return {
   },
 
   {
+    'nvim-treesitter/nvim-treesitter',
+    lazy = false,
+    build = ':TSUpdate'
+  },
+
+  {
     'stevearc/aerial.nvim',
     lazy = true,
     event = { 'BufReadPost', 'BufWritePost', 'BufNewFile' },

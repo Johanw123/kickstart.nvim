@@ -85,6 +85,12 @@ vim.o.completeopt = 'menu,noinsert,popup,fuzzy,preview'
 --
 --
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'cs' },
+  callback = function() vim.treesitter.start() end,
+})
+
+
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
   callback = function(event)
@@ -254,6 +260,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 --https://www.reddit.com/r/neovim/comments/1jkfpqg/are_there_still_benefits_for_using_lspconfig_in/
 vim.lsp.enable { 'clangd', 'powershell_es', 'luals', 'glsl_analyzer', 'shader-ls' }
 
+require('nvim-treesitter').install { 'rust', 'c_sharp', 'zig', 'cpp', 'lua' }
+
 if vim.g.neovide then
   --vim.g.neovide_transparency = 0.9
   --vim.g.transparency = 0.9
@@ -411,7 +419,7 @@ local ensure_installed = {
   roslyn = {},
   glsl_analyzer = {},
 }
-require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+-- require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
 vim.treesitter.language.register('glsl', { 'frag', 'vert' })
 vim.treesitter.language.register('hlsl', { 'fx', 'mgfxc' })
