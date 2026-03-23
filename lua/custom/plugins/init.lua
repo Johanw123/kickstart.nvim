@@ -620,23 +620,23 @@ return {
   { 'NvChad/nvim-colorizer.lua' },
 
   -- https://www.reddit.com/r/neovim/comments/10nfhqa/is_there_a_way_to_show_side_by_side_diffs_when/
-  {
-    'tanvirtin/vgit.nvim',
-    branch = 'v1.0.x',
-    -- or               , tag = 'v1.0.2',
-    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons' },
-    -- Lazy loading on 'VimEnter' event is necessary.
-    event = 'VimEnter',
-    config = function()
-      require('vgit').setup {
-        settings = {
-          scene = {
-            diff_preference = 'split',
-          },
-        },
-      }
-    end,
-  },
+  -- {
+  --   'tanvirtin/vgit.nvim',
+  --   branch = 'v1.0.x',
+  --   -- or               , tag = 'v1.0.2',
+  --   dependencies = { 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons' },
+  --   -- Lazy loading on 'VimEnter' event is necessary.
+  --   event = 'VimEnter',
+  --   config = function()
+  --     require('vgit').setup {
+  --       settings = {
+  --         scene = {
+  --           diff_preference = 'split',
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
 
   {
     'timtro/glslView-nvim',
@@ -650,7 +650,7 @@ return {
   },
 
   {
-    'williamboman/mason.nvim',
+    "mason-org/mason.nvim",
     config = true,
     dependencies = {
       'WhoIsSethDaniel/mason-tool-installer.nvim',

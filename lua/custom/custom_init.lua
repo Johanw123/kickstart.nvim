@@ -258,7 +258,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- })
 
 --https://www.reddit.com/r/neovim/comments/1jkfpqg/are_there_still_benefits_for_using_lspconfig_in/
-vim.lsp.enable { 'clangd', 'powershell_es', 'luals', 'glsl_analyzer', 'shader-ls' }
+vim.lsp.enable { 'clangd', 'powershell_es', 'luals', 'glsl_analyzer', 'shader-ls', 'lemminx', 'pyright', 'rust_analyzer' }
+-- vim.lsp.configs.lemminx = {
+--   default_config = {
+--     settings = {},
+--   },
+-- }
 
 require('nvim-treesitter').install { 'rust', 'c_sharp', 'zig', 'cpp', 'lua' }
 
@@ -417,6 +422,7 @@ local ensure_installed = {
   shellharden = {},
   zls = {},
   roslyn = {},
+  lemminx = {},
   glsl_analyzer = {},
 }
 -- require('mason-tool-installer').setup { ensure_installed = ensure_installed }
