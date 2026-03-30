@@ -421,19 +421,18 @@ require('mason').setup {
   },
 }
 
-local ensure_installed = {
-  clangd = {},
-  cpptools = {},
-  pyright = {},
-  rust_analyzer = {},
-  powershell_es = {},
-  shellcheck = {},
-  shellharden = {},
-  zls = {},
-  roslyn = {},
-  lemminx = {},
-  glsl_analyzer = {},
-}
+-- local ensure_installed = {
+--   clangd = {},
+--   cpptools = {},
+--   pyright = {},
+--   rust_analyzer = {},
+--   powershell_es = {},
+--   shellcheck = {},
+--   shellharden = {},
+--   zls = {},
+--   roslyn = {},
+--   glsl_analyzer = {},
+-- }
 -- require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
 vim.treesitter.language.register('glsl', { 'frag', 'vert' })
@@ -441,3 +440,4 @@ vim.treesitter.language.register('hlsl', { 'fx', 'mgfxc' })
 
 require 'custom.keybindings'
 require 'custom.highlights'
+
