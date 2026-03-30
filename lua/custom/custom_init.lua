@@ -85,20 +85,20 @@ vim.o.completeopt = 'menu,noinsert,popup,fuzzy,preview'
 --
 --
 
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = { 'cs', 'h', 'cpp' },
---   callback = function() vim.treesitter.start() end,
--- })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'cs', 'h', 'cpp' },
+  callback = function() vim.treesitter.start() end,
+})
 
- vim.api.nvim_create_autocmd("BufReadPost", {
-        pattern = "*",
-        callback = function()
-            -- can start a specific treesitter on a specific buffer also
-            -- vim.treesitter.start(0, "c")
-            vim.treesitter.start()
-        end,
-        -- once = true,
-    })
+ -- vim.api.nvim_create_autocmd("BufReadPost", {
+ --        pattern = "*",
+ --        callback = function()
+ --            -- can start a specific treesitter on a specific buffer also
+ --            -- vim.treesitter.start(0, "c")
+ --            vim.treesitter.start()
+ --        end,
+ --        -- once = true,
+ --    })
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
