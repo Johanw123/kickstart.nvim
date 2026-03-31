@@ -90,6 +90,33 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function() vim.treesitter.start() end,
 })
 
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  pattern = { '*.fx' },
+  callback = function(ev)
+    vim.treesitter.start(ev.buf, 'hlsl')
+
+--     cmd = { '/home/johan/.vscode/extensions/timgjones.hlsltools-1.1.303/bin/linux-x64/ShaderTools.LanguageServer' },
+      vim.lsp.start {
+        name = 'hlsl LSP',
+        -- cmd = { 'dotnet', avalonia_lsp_bin },
+        cmd = { '/home/johan/.vscode/extensions/timgjones.hlsltools-1.1.303/bin/linux-x64/ShaderTools.LanguageServer' },
+        root_dir = vim.fn.getcwd(),
+      }
+  end,
+})
+
+
+--https://www.reddit.com/r/neovim/comments/1jkfpqg/are_there_still_benefits_for_using_lspconfig_in/
+vim.lsp.enable { 'clangd', 'powershell_es', 'luals', 'glsl_analyzer', 'shader-ls', 'lemminx', 'pyright', 'rust_analyzer' }
+-- vim.lsp.configs.lemminx = {
+--   default_config = {
+--     settings = {},
+--   },
+-- }
+
+-- vim.treesitter.language.register('glsl', { 'frag', 'vert' })
+-- vim.treesitter.language.register('hlsl', { 'fx', 'mgfxc', 'hlsl' })
+
  -- vim.api.nvim_create_autocmd("BufReadPost", {
  --        pattern = "*",
  --        callback = function()
@@ -266,14 +293,26 @@ vim.api.nvim_create_autocmd('LspAttach', {
 --   end
 -- })
 
---https://www.reddit.com/r/neovim/comments/1jkfpqg/are_there_still_benefits_for_using_lspconfig_in/
-vim.lsp.enable { 'clangd', 'powershell_es', 'luals', 'glsl_analyzer', 'shader-ls', 'lemminx', 'pyright', 'rust_analyzer' }
--- vim.lsp.configs.lemminx = {
---   default_config = {
---     settings = {},
---   },
--- }
 
+
+-- vim.api.nvim_create_autocmd("FileType", {
+--         group = vim.api.nvim_create_augroup("tree-sitter-enable", { clear = true }),
+--         callback = function(args)
+--           local lang = vim.treesitter.language.get_lang(args.match)
+--           if not lang then return end
+--
+--           if vim.treesitter.query.get(lang, "highlights") then vim.treesitter.start(args.buf) end
+--
+--           if vim.treesitter.query.get(lang, "indents") then
+--             vim.opt_local.indentexpr = 'v:lua.require(“nvim-treesitter”).indentexpr()'
+--           end
+--
+--           if vim.treesitter.query.get(lang, "folds") then
+--             vim.opt_local.foldmethod = "expr"
+--             vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+--           end
+--         end,
+--       })
 -- require('nvim-treesitter').install { 'rust', 'c_sharp', 'zig', 'cpp', 'lua' }
 
 if vim.g.neovide then
@@ -330,6 +369,19 @@ elseif vim.fn.has 'win32' == 1 and vim.fn.has 'wsl' == 0 then
     end,
   })
 
+
+  -- vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  --   pattern = { '*.fx' },
+  --   callback = function()
+  --     vim.cmd.setfiletype 'hlsl'
+  --     vim.lsp.start {
+  --       name = 'hlsl LSP',
+  --       cmd = { 'shader-ls' },
+  --       root_dir = vim.fn.getcwd(),
+  --     }
+  --   end,
+  -- })
+
   vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
     pattern = { '*.xaml' },
     callback = function()
@@ -337,6 +389,7 @@ elseif vim.fn.has 'win32' == 1 and vim.fn.has 'wsl' == 0 then
     end,
   })
 end
+
 
 vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
   pattern = { '*.xaml' },
@@ -435,8 +488,11 @@ require('mason').setup {
 -- }
 -- require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-vim.treesitter.language.register('glsl', { 'frag', 'vert' })
-vim.treesitter.language.register('hlsl', { 'fx', 'mgfxc' })
+vim.filetype.add{
+  hlsl = "hlsl",
+  fx = "hlsl"
+}
+
 
 require 'custom.keybindings'
 require 'custom.highlights'
