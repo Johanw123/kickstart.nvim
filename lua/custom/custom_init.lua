@@ -86,7 +86,7 @@ vim.o.completeopt = 'menu,noinsert,popup,fuzzy,preview'
 --
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'cs', 'h', 'cpp' },
+  pattern = { 'cs', 'h', 'cpp', 'fx' },
   callback = function() vim.treesitter.start() end,
 })
 
